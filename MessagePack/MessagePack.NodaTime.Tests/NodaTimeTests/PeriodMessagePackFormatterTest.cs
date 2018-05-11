@@ -22,10 +22,10 @@ namespace MessagePack.NodaTime.Tests
         {
             Period[] p = new Period[]
                 { Period.FromDays(1),
+                Period.FromMonths(2),
                 Period.FromDays(1),
-                Period.FromDays(1),
-                Period.FromDays(1),
-                Period.FromDays(1)
+                Period.FromNanoseconds(5),
+                Period.FromHours(3)
             };
             Assert.Equal(TestTools.Convert(p), p);
         }

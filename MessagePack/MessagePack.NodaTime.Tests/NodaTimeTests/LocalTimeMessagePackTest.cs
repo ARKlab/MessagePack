@@ -28,10 +28,10 @@ namespace MessagePack.NodaTime.Tests
         public void LocalTimeArrayTest()
         {
             LocalTime[] lt =
-                { LocalTime.FromSecondsSinceMidnight(1),
-                LocalTime.FromSecondsSinceMidnight(1),
-                LocalTime.FromSecondsSinceMidnight(1),
-                LocalTime.FromSecondsSinceMidnight(1),
+                { LocalTime.FromTicksSinceMidnight(4000),
+                LocalTime.FromSecondsSinceMidnight(10000),
+                LocalTime.FromHourMinuteSecondTick(20,10,1,13),
+                new LocalTime(),
                 LocalTime.FromSecondsSinceMidnight(1)
             };
             Assert.Equal(TestTools.Convert(lt), lt);

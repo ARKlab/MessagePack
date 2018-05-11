@@ -14,15 +14,13 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void OffsetDateTimeTest()
         {
-            LocalDateTime ldt = LocalDateTime.FromDateTime(DateTime.Now);
-            OffsetDateTime offSet = new OffsetDateTime(ldt, new Offset());
+            OffsetDateTime offSet = new OffsetDateTime().PlusHours(3).WithOffset(Offset.FromHours(6));
             Assert.Equal(TestTools.Convert(offSet), offSet);
         }
 
         [Fact]
         public void NullableOffsetDateTimeTest()
         {
-            //LocalDateTime? ldt = null;
             OffsetDateTime? offSet = null;
             Assert.Equal(TestTools.Convert(offSet), offSet);
         }
@@ -32,12 +30,15 @@ namespace MessagePack.NodaTime.Tests
         {
             LocalDateTime ldt = LocalDateTime.FromDateTime(DateTime.Now);
             OffsetDateTime[] offSet = new OffsetDateTime[]
-                { new OffsetDateTime(ldt, new Offset()),
-                new OffsetDateTime(ldt, new Offset()),
-                new OffsetDateTime(ldt, new Offset()),
-                new OffsetDateTime(ldt, new Offset()),
-                new OffsetDateTime(ldt, new Offset())
+                { new OffsetDateTime().WithOffset(Offset.FromHours(2)),
+                new OffsetDateTime(),
+                new OffsetDateTime(LocalDateTime.FromDateTime(DateTime.UtcNow).PlusNanoseconds(1), Offset.FromHours(1)),
+                new OffsetDateTime().PlusMinutes(10),
+                new OffsetDateTime().PlusHours(3).WithOffset(Offset.FromHours(6))
             };
+
+            var aaa = TestTools.Convert(offSet);
+
             Assert.Equal(TestTools.Convert(offSet), offSet);
         }
 

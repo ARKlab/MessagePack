@@ -30,10 +30,10 @@ namespace MessagePack.NodaTime.Tests
         {
             LocalDate[] ld =
                 { LocalDate.FromDateTime(DateTime.Now),
-                LocalDate.FromDateTime(DateTime.Now),
-                LocalDate.FromDateTime(DateTime.Now),
-                LocalDate.FromDateTime(DateTime.Now),
-                LocalDate.FromDateTime(DateTime.Now)
+                LocalDate.FromDateTime(new DateTime()),
+                LocalDate.FromDateTime(DateTime.Now.AddTicks(500)),
+                LocalDate.FromDateTime(DateTime.Now.AddMonths(10)),
+                LocalDate.FromDateTime(new DateTime(2010,10,10))
             };
             Assert.Equal(TestTools.Convert(ld), ld);
         }

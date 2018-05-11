@@ -9,10 +9,5 @@ namespace MessagePack.NodaTime.Tests.Helpers
         {
             return MessagePackSerializer.Deserialize<T>(MessagePackSerializer.Serialize(value));
         }
-
-        public static T ConvertLZ4<T>(T value)
-        {
-            return LZ4MessagePackSerializer.Deserialize<T>(LZ4MessagePackSerializer.Serialize(value));
-        }
     }
 }

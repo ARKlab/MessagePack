@@ -24,15 +24,15 @@ namespace MessagePack.NodaTime.Tests
             Instant? inst = null;
             Assert.Equal(TestTools.Convert(inst), inst);
         }                
-       
+
         [Fact]
         public void InstantArrayTest()
         {
             Instant[] inst =
-                { Instant.FromDateTimeUtc(DateTime.UtcNow),
-                Instant.FromDateTimeUtc(DateTime.UtcNow),
-                Instant.FromDateTimeUtc(DateTime.UtcNow),
-                Instant.FromDateTimeUtc(DateTime.UtcNow),
+                { Instant.FromDateTimeUtc(DateTime.UtcNow.AddHours(13)),
+                Instant.FromDateTimeUtc(DateTime.UtcNow.AddMinutes(54)),
+                Instant.FromDateTimeUtc(DateTime.UtcNow.AddYears(1)),
+                Instant.FromDateTimeUtc(DateTime.UtcNow.AddSeconds(33)),
                 Instant.FromDateTimeUtc(DateTime.UtcNow),
             };
             Assert.Equal(TestTools.Convert(inst), inst);

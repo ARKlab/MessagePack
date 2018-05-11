@@ -29,11 +29,11 @@ namespace MessagePack.NodaTime.Tests
         public void LocalDateTimeArrayTest()
         {
             LocalDateTime[] ldt =
-                { LocalDateTime.FromDateTime(DateTime.Now),
+                { LocalDateTime.FromDateTime(DateTime.Now.AddDays(3)),
+                LocalDateTime.FromDateTime(new DateTime()),
+                LocalDateTime.FromDateTime(DateTime.Now.AddTicks(500)),
                 LocalDateTime.FromDateTime(DateTime.Now),
-                LocalDateTime.FromDateTime(DateTime.Now),
-                LocalDateTime.FromDateTime(DateTime.Now),
-                LocalDateTime.FromDateTime(DateTime.Now)
+                LocalDateTime.FromDateTime(new DateTime(2010,10,10))
             };
             Assert.Equal(TestTools.Convert(ldt), ldt);
         }

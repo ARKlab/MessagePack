@@ -22,7 +22,6 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void NullableZonedDateTimeTest()
         {
-            //var inst = Instant.FromDateTimeUtc(DateTime.UtcNow);
             ZonedDateTime? zoned = null;
             Assert.Equal(TestTools.Convert(zoned), zoned);
         }

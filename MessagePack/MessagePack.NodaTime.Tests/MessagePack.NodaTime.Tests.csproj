@@ -44,6 +44,7 @@
     <Reference Include="MessagePack, Version=1.7.3.4, Culture=neutral, PublicKeyToken=b4a0369545f0a1be, processorArchitecture=MSIL">
       <HintPath>..\packages\MessagePack.1.7.3.4\lib\net45\MessagePack.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NodaTime, Version=2.2.5.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.2.2.5\lib\net45\NodaTime.dll</HintPath>
     </Reference>
@@ -51,10 +52,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
@@ -71,17 +68,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateTimeTypeTests.cs" />
     <Compile Include="Helpers\TestTools.cs" />
-    <Compile Include="NodatimeResolverTest.cs" />
     <Compile Include="Init\MessagePackTestInit.cs" />
-    <Compile Include="ZonedDateTimeMessagePackFormatterTest.cs" />
-    <Compile Include="PeriodMessagePackFormatterTest.cs" />
-    <Compile Include="OffsetMessagePackFormatterTest.cs" />
-    <Compile Include="OffsetDateTimeMessagePackFormatterTest.cs" />
-    <Compile Include="LocalTimeMessagePackTest.cs" />
-    <Compile Include="LocalDateTimeMessagePackFormatterTest.cs" />
-    <Compile Include="LocalDateMessagePackFormatterTest.cs" />
-    <Compile Include="InstantMessagePackTest.cs" />
+    <Compile Include="NodaTimeTests\ZonedDateTimeMessagePackFormatterTest.cs" />
+    <Compile Include="NodaTimeTests\PeriodMessagePackFormatterTest.cs" />
+    <Compile Include="NodaTimeTests\OffsetMessagePackFormatterTest.cs" />
+    <Compile Include="NodaTimeTests\OffsetDateTimeMessagePackFormatterTest.cs" />
+    <Compile Include="NodaTimeTests\LocalTimeMessagePackTest.cs" />
+    <Compile Include="NodaTimeTests\LocalDateTimeMessagePackFormatterTest.cs" />
+    <Compile Include="NodaTimeTests\LocalDateMessagePackFormatterTest.cs" />
+    <Compile Include="NodaTimeTests\InstantMessagePackFormatterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,7 +86,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\MessagePackAnalyzer.1.6.0\analyzers\dotnet\cs\MessagePackAnalyzer.dll" />
     <Analyzer Include="..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +93,9 @@
       <Project>{00d42f91-2e9a-4138-b667-1de2a971f28d}</Project>
       <Name>MessagePack.NodaTime</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TimestampTests\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

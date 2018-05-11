@@ -29,10 +29,10 @@ namespace MessagePack.NodaTime.Tests
         {
             Offset[] offSet = new Offset[]
                 { Offset.FromHours(1),
-                Offset.FromHours(1),
-                Offset.FromHours(1),
-                Offset.FromHours(1),
-                Offset.FromHours(1)
+                Offset.FromHours(8),
+                Offset.FromHours(2),
+                Offset.FromHours(3),
+                Offset.FromHours(9)
             };
             Assert.Equal(TestTools.Convert(offSet), offSet);
         }
