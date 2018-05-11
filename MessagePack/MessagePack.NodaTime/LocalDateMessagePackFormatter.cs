@@ -66,6 +66,10 @@ namespace MessagePack.NodaTime
         public LocalDate Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
             var dt = MessagePackBinary.ReadDateTime(bytes, offset, out readSize);
+
+            if (dt.TimeOfDay.TotalMilliseconds != 0)
+                throw new InvalidOperationException($"code is invalid. code:{bytes[offset]} format:{MessagePackCode.ToFormatName(bytes[offset])}");
+
             return LocalDate.FromDateTime(dt);
         }
 
