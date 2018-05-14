@@ -16,7 +16,7 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void LocalDateTimeToDateTime()
         {
-            DateTime dt = new DateTime(2000, 1, 1, 0, 0, 0);
+            DateTime dt = new DateTime(2000, 1, 1, 1, 22, 33);
             LocalDateTime ldt = LocalDateTime.FromDateTime(dt);
 
             var localDateTimeBinary = MessagePackSerializer.Serialize(ldt);
@@ -28,7 +28,7 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void DateTimeToLocalDateTime()
         {
-            DateTime dt = new DateTime(2000, 1, 1, 0, 0, 0);
+            DateTime dt = new DateTime(1876, 5, 7, 7, 9, 12);
             LocalDateTime ldt = LocalDateTime.FromDateTime(dt);
 
             var bin = MessagePackSerializer.Serialize(dt);
@@ -40,7 +40,7 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void LocalDateTimeToLocalDate()
         {
-            LocalDateTime ldt = new LocalDateTime(2000, 1, 1, 0, 0, 0, 0);
+            LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0);
             var bin = MessagePackSerializer.Serialize(ldt);
 
             var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
@@ -50,7 +50,7 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void DateTimeToLocalDate()
         {
-            DateTime dt = new DateTime(2000, 1, 1, 0, 0, 0);
+            DateTime dt = new DateTime(1986, 12, 11, 0, 0, 0);
 
             var bin = MessagePackSerializer.Serialize(dt);
 
@@ -104,7 +104,6 @@ namespace MessagePack.NodaTime.Tests
             }
             catch (Exception e)
             {
-
                 ex = e;
             }
             Assert.Equal(typeof(InvalidOperationException), ex.GetType());
