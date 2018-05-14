@@ -28,11 +28,11 @@ namespace MessagePack.NodaTime.Tests
         public void OffsetArrayTest()
         {
             Offset[] offSet = new Offset[]
-                { Offset.FromHours(1),
-                Offset.FromHours(8),
-                Offset.FromHours(2),
+                { Offset.FromHoursAndMinutes(1, 3),
+                Offset.FromSeconds(80),
+                Offset.FromMilliseconds(200),
                 Offset.FromHours(3),
-                Offset.FromHours(9)
+                Offset.FromNanoseconds(99)
             };
             Assert.Equal(TestTools.Convert(offSet), offSet);
         }
