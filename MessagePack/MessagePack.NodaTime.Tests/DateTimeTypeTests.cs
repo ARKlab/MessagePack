@@ -30,8 +30,10 @@ namespace MessagePack.NodaTime.Tests
         {
             DateTime dt = new DateTime(1876, 5, 7, 7, 9, 12);
             LocalDateTime ldt = LocalDateTime.FromDateTime(dt);
+            var ldtUtc = ldt.ToDateTimeUnspecified();
+            ldtUtc = DateTime.SpecifyKind(ldtUtc, DateTimeKind.Utc);
 
-            var bin = MessagePackSerializer.Serialize(dt);
+            var bin = MessagePackSerializer.Serialize(ldtUtc);
             var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
 
             Assert.Equal(ldt, res);
