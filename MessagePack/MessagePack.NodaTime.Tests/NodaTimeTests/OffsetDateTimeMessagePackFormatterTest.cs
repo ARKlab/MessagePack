@@ -28,11 +28,10 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void OffsetDateTimeArrayTest()
         {
-            LocalDateTime ldt = LocalDateTime.FromDateTime(DateTime.Now);
             OffsetDateTime[] offSet = new OffsetDateTime[]
                 { new OffsetDateTime().WithOffset(Offset.FromHours(2)),
                 new OffsetDateTime(),
-                new OffsetDateTime(LocalDateTime.FromDateTime(DateTime.UtcNow).PlusNanoseconds(1), Offset.FromHours(1)),
+                new OffsetDateTime(LocalDateTime.FromDateTime(DateTime.UtcNow).PlusNanoseconds(200), Offset.FromHours(1)),
                 new OffsetDateTime().PlusMinutes(10),
                 new OffsetDateTime().PlusHours(3).WithOffset(Offset.FromHours(6))
             };
