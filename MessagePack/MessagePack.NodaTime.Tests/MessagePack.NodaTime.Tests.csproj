@@ -68,7 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DateTimeTypeTests.cs" />
+    <Compile Include="SystemDateTimeTests.cs" />
     <Compile Include="Helpers\TestTools.cs" />
     <Compile Include="Init\MessagePackTestInit.cs" />
     <Compile Include="NodaTimeTests\ZonedDateTimeMessagePackFormatterTest.cs" />
@@ -94,9 +94,7 @@
       <Name>MessagePack.NodaTime</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TimestampTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
