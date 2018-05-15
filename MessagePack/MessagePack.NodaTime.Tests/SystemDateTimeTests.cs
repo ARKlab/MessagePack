@@ -11,7 +11,7 @@ using Xunit;
 namespace MessagePack.NodaTime.Tests
 {
     [Collection("ResolverCollection")]
-    public class DateTimeTypeTests
+    public class SystemDateTimeTests
     {
         [Fact]
         public void LocalDateTimeToDateTime()
@@ -28,12 +28,10 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void DateTimeToLocalDateTime()
         {
-            DateTime dt = new DateTime(1876, 5, 7, 7, 9, 12);
-            LocalDateTime ldt = LocalDateTime.FromDateTime(dt);
-            var ldtUtc = ldt.ToDateTimeUnspecified();
-            ldtUtc = DateTime.SpecifyKind(ldtUtc, DateTimeKind.Utc);
+            var ldt = new LocalDateTime(2018, 5, 15, 0, 0);
+            var dt = DateTime.SpecifyKind(ldt.ToDateTimeUnspecified(), DateTimeKind.Utc);
 
-            var bin = MessagePackSerializer.Serialize(ldtUtc);
+            var bin = MessagePackSerializer.Serialize(dt);
             var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
 
             Assert.Equal(ldt, res);
@@ -43,9 +41,10 @@ namespace MessagePack.NodaTime.Tests
         public void LocalDateTimeToLocalDate()
         {
             LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0);
-            var bin = MessagePackSerializer.Serialize(ldt);
 
+            var bin = MessagePackSerializer.Serialize(ldt);
             var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
+
             Assert.Equal(ldt.Date, res);
         }
 
@@ -55,9 +54,9 @@ namespace MessagePack.NodaTime.Tests
             DateTime dt = new DateTime(1986, 12, 11, 0, 0, 0);
 
             var bin = MessagePackSerializer.Serialize(dt);
-
             var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
-            Assert.Equal(dt, res.ToDateTimeUnspecified());
+
+            Assert.Equal(dt.Date, res.ToDateTimeUnspecified());
         }
 
         [Fact]
@@ -77,38 +76,18 @@ namespace MessagePack.NodaTime.Tests
         public void DateTimeToLocalDateWithPrecisionLoss()
         {
             DateTime dt = new DateTime(2000, 1, 1, 0, 0, 1);
-            Exception ex = null;
 
-            var bin = MessagePackSerializer.Serialize(dt);
-
-            try
-            {
-                var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
-            }
-            catch (Exception e)
-            {
-                ex = e;
-            }
-
-            Assert.Equal(typeof(InvalidOperationException), ex.GetType());
+            Assert.Throws<InvalidOperationException>(() => 
+            (MessagePackSerializer.Deserialize<LocalDate>(MessagePackSerializer.Serialize(dt))));
         }
 
         [Fact]
         public void LocalDateTimeToLocalDateWithPrecisionLoss()
         {
             LocalDateTime ldt = new LocalDateTime(2000, 1, 1, 0, 0, 0, 1);
-            Exception ex = null;
-            var bin = MessagePackSerializer.Serialize(ldt);            
 
-            try
-            {
-                var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
-            }
-            catch (Exception e)
-            {
-                ex = e;
-            }
-            Assert.Equal(typeof(InvalidOperationException), ex.GetType());
+            Assert.Throws<InvalidOperationException>(() =>
+            (MessagePackSerializer.Deserialize<LocalDate>(MessagePackSerializer.Serialize(ldt))));            
         }
 
     }
