@@ -24,7 +24,7 @@ namespace MessagePack.NodaTime.Tests
             LocalDateTime? ldt = null;
             Assert.Equal(TestTools.Convert(ldt), ldt);
         }
-        
+
         [Fact]
         public void LocalDateTimeArrayTest()
         {
@@ -49,6 +49,26 @@ namespace MessagePack.NodaTime.Tests
                 null
             };
             Assert.Equal(TestTools.Convert(ldt), ldt);
+        }
+
+        [Fact]
+        public void LocalDateTimeToLocalDateWithTimeLoss()
+        {
+            LocalDateTime ldt = new LocalDateTime(2018, 5, 15, 1, 0, 0).PlusTicks(1);
+            var bin = MessagePackSerializer.Serialize(ldt);
+
+            Assert.Throws<InvalidOperationException>(() => (MessagePackSerializer.Deserialize<LocalDate>(bin)));
+        }
+
+        [Fact]
+        public void LocalDateTimeToLocalDateTimeWithNanosecondsLoss()
+        {
+            //nanosecond accuracy lost in datetime conversion --> ReadMe
+            LocalDateTime ldt = new LocalDateTime(2018, 5, 15, 0, 0, 0).PlusNanoseconds(1);
+            var bin = MessagePackSerializer.Serialize(ldt);
+            var res = TestTools.Convert(ldt);
+
+            Assert.NotEqual(ldt, res);
         }
     }
 }
