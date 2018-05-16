@@ -48,6 +48,17 @@ namespace MessagePack.NodaTime.Tests
             Assert.Equal(ldt.Date, res);
         }
 
+        [Fact(Skip = "Needs investigation")]
+        public void LocalDateTimeToLocalDateFailing()
+        {
+            LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0).PlusNanoseconds(1);
+
+            var bin = MessagePackSerializer.Serialize(ldt);
+            var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
+
+            Assert.Equal(ldt.Date, res);
+        }
+
         [Fact]
         public void DateTimeToLocalDate()
         {
