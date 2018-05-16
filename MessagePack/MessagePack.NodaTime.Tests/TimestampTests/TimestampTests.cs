@@ -15,24 +15,27 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         public void LocalDateTimeTimestamp96_1()
         {
             LocalDateTime ldt1 = new LocalDateTime(0001, 01, 01, 00, 00, 00);
-            var a = MessagePackSerializer.Serialize(ldt1); // a = timestamp96 (byte[15])
-            Assert.Equal(15, a.Length);
+
+            var ts96_1 = MessagePackSerializer.Serialize(ldt1); // timestamp96 (byte[15])
+            Assert.Equal(15, ts96_1.Length);
         }
 
         [Fact]
         public void LocalDateTimeTimestamp96_2()
         {
             LocalDateTime ldt2 = new LocalDateTime(9999, 01, 01, 00, 00, 00);
-            var a = MessagePackSerializer.Serialize(ldt2); // a = timestamp96 (byte[15])
-            Assert.Equal(15, a.Length);
+
+            var ts96_2 = MessagePackSerializer.Serialize(ldt2); // timestamp96 (byte[15])
+            Assert.Equal(15, ts96_2.Length);
         }
 
         [Fact]
         public void LocalDateTimeTimestamp64()
         {
             LocalDateTime ldt3 = new LocalDateTime(2108, 01, 01, 00, 00, 00);
-            var a = MessagePackSerializer.Serialize(ldt3); // a = timestamp64 (byte[10])
-            Assert.Equal(10, a.Length);
+
+            var ts64 = MessagePackSerializer.Serialize(ldt3); // timestamp64 (byte[10])
+            Assert.Equal(10, ts64.Length);
         }
 
         [Fact]
@@ -40,8 +43,8 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         {
             LocalDateTime ldt4 = new LocalDateTime(1971, 01, 01, 22, 45, 56);
 
-            var a = MessagePackSerializer.Serialize(ldt4); // a = timestamp32 (byte[6])
-            Assert.Equal(6, a.Length);
+            var ts32 = MessagePackSerializer.Serialize(ldt4); // timestamp32 (byte[6])
+            Assert.Equal(6, ts32.Length);
         }
     }
 
@@ -53,8 +56,8 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         {
             LocalDate ld1 = new LocalDate(0001, 01, 01);
 
-            var a = MessagePackSerializer.Serialize(ld1); // a = timestamp96 (byte[15])
-            Assert.Equal(15, a.Length);
+            var ts96_1 = MessagePackSerializer.Serialize(ld1); // timestamp96 (byte[15])
+            Assert.Equal(15, ts96_1.Length);
         }
 
         [Fact]
@@ -62,8 +65,8 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         {
             LocalDate ld2 = new LocalDate(9999, 01, 01);
 
-            var a = MessagePackSerializer.Serialize(ld2); // a = timestamp96 (byte[15])
-            Assert.Equal(15, a.Length);
+            var ts96_2 = MessagePackSerializer.Serialize(ld2); // timestamp96 (byte[15])
+            Assert.Equal(15, ts96_2.Length);
         }
 
         [Fact]
@@ -71,8 +74,8 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         {
             LocalDate ld3 = new LocalDate(2108, 01, 01);
 
-            var a = MessagePackSerializer.Serialize(ld3); // a = timestamp64 (byte[10])
-            Assert.Equal(10, a.Length);
+            var ts64 = MessagePackSerializer.Serialize(ld3); // timestamp64 (byte[10])
+            Assert.Equal(10, ts64.Length);
         }
 
         [Fact]
@@ -80,8 +83,8 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         {
             LocalDate ld4 = new LocalDate(1971, 01, 01);
 
-            var a = MessagePackSerializer.Serialize(ld4); // a = timestamp32 (byte[6])
-            Assert.Equal(6, a.Length);
+            var ts32 = MessagePackSerializer.Serialize(ld4); // timestamp32 (byte[6])
+            Assert.Equal(6, ts32.Length);
         }
     }
 
@@ -91,11 +94,11 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         [Fact]
         public void InstantTimestamp96_1()
         {
-            var dt = new DateTime(0001, 01, 01, 00, 00, 00, DateTimeKind.Utc);
+            var dt = new DateTime(0001, 01, 01, 00, 00, 00).ToUniversalTime();
             Instant inst1 = Instant.FromDateTimeUtc(dt);
 
-            var a = MessagePackSerializer.Serialize(inst1); // a = timestamp96 (byte[15])
-            Assert.Equal(15, a.Length);
+            var ts96_1 = MessagePackSerializer.Serialize(inst1); // timestamp96 (byte[15])
+            Assert.Equal(15, ts96_1.Length);
         }
 
         [Fact]
@@ -104,8 +107,8 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
             var dt = new DateTime(9999, 01, 01, 00, 00, 00).ToUniversalTime();
             Instant inst2 = Instant.FromDateTimeUtc(dt);
 
-            var a = MessagePackSerializer.Serialize(inst2); // a = timestamp96 (byte[15])
-            Assert.Equal(15, a.Length);
+            var ts96_2 = MessagePackSerializer.Serialize(inst2); // timestamp96 (byte[15])
+            Assert.Equal(15, ts96_2.Length);
         }
 
         [Fact]
@@ -114,18 +117,18 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
             var dt = new DateTime(2108, 01, 01, 00, 00, 00).ToUniversalTime();
             Instant inst3 = Instant.FromDateTimeUtc(dt);
 
-            var a = MessagePackSerializer.Serialize(inst3); // a = timestamp64 (byte[10])
-            Assert.Equal(10, a.Length);
+            var ts64 = MessagePackSerializer.Serialize(inst3); // timestamp64 (byte[10])
+            Assert.Equal(10, ts64.Length);
         }
 
         [Fact]
         public void InstantTimestamp32()
         {
             var dt = new DateTime(1971, 01, 01, 00, 00, 00).ToUniversalTime();
-            Instant inst3 = Instant.FromDateTimeUtc(dt);
+            Instant inst4 = Instant.FromDateTimeUtc(dt);
 
-            var a = MessagePackSerializer.Serialize(inst3); // a = timestamp32 (byte[6])
-            Assert.Equal(6, a.Length);
+            var ts32 = MessagePackSerializer.Serialize(inst4); // timestamp32 (byte[6])
+            Assert.Equal(6, ts32.Length);
         }
     }
 
@@ -137,9 +140,9 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
         {
             //only changes to timestamp64 if nanoseconds are 100 or more
             LocalDateTime ld1 = new LocalDateTime(1971, 01, 01, 00, 00, 00, 00).PlusNanoseconds(100);
+            var ts32_64 = MessagePackSerializer.Serialize(ld1); // a = timestamp64 (byte[10])
 
-            var a = MessagePackSerializer.Serialize(ld1); // a = timestamp64 (byte[10])
-            Assert.Equal(10, a.Length);
+            Assert.Equal(10, ts32_64.Length);
         }
 
         [Fact(Skip = "Nanos are under 100ns")]
@@ -148,8 +151,8 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
             //only changes to timestamp64 if nanoseconds are 100 or more
             LocalDateTime ld1 = new LocalDateTime(1971, 01, 01, 00, 00, 00, 00).PlusNanoseconds(99);
 
-            var a = MessagePackSerializer.Serialize(ld1); // a = timestamp64 (byte[10])
-            Assert.Equal(10, a.Length);
+            var ts32_64 = MessagePackSerializer.Serialize(ld1); // a = timestamp64 (byte[10])
+            Assert.Equal(10, ts32_64.Length);
         }
     }
 }
