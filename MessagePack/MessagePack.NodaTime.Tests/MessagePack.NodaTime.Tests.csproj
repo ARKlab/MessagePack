@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NodaTimeTests\NodatimeResolverTest.cs" />
     <Compile Include="SystemDateTimeTests.cs" />
     <Compile Include="Helpers\TestTools.cs" />
     <Compile Include="Init\MessagePackTestInit.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="NodaTimeTests\LocalDateMessagePackFormatterTest.cs" />
     <Compile Include="NodaTimeTests\InstantMessagePackFormatterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimestampTests\TimestampTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
