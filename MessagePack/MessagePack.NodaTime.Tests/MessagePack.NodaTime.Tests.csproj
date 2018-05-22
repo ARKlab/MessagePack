@@ -68,7 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NodaTimeTests\NodatimeResolverTest.cs" />
+    <Compile Include="ObjectTesting.cs" />
     <Compile Include="SystemDateTimeTests.cs" />
     <Compile Include="Helpers\TestTools.cs" />
     <Compile Include="Init\MessagePackTestInit.cs" />
