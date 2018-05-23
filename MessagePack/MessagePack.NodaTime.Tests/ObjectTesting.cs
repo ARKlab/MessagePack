@@ -11,6 +11,11 @@ using Xunit;
 
 namespace MessagePack.NodaTime.Tests
 {
+    public class LDT
+    {
+        public LocalDateTime ldt { get; set; }
+    }
+
     [Collection("ResolverCollection")]
     public class ObjectTesting
     {
@@ -25,7 +30,17 @@ namespace MessagePack.NodaTime.Tests
 
             Assert.Equal(o.ldt.ToDateTimeUnspecified(), abc); // in DateTime format due to 'abc' being DateTime object
         }
-        
+
+        [Fact]
+        public void AnonTypeWithClassProperty()
+        {
+            var o = new { ldt = LocalDateTime.FromDateTime(DateTime.Now) };
+            var bin = MessagePackSerializer.Serialize(o);
+            var res = MessagePackSerializer.Deserialize<LDT>(bin);
+
+            Assert.Equal(o.ldt, res.ldt);
+        }
+
         [Fact(Skip = "object cannot be serialized due to DateTime part of Nodatime type")]
         public void ObjectToDynamic()
         {
