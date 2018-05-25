@@ -43,7 +43,7 @@ namespace MessagePack.NodaTime
             {typeof(LocalDateTime), LocalDateTimeAsDateTimeMessagePackFormatter.Instance},
 
             {typeof(Offset), OffsetMessagePackFormatter.Instance},
-            {typeof(Period), PeriodAsIsoStringMessagePackFormatter.Instance},
+            {typeof(Period), PeriodAsIntArrayMessagePackFormatter.Instance},
 
             {typeof(OffsetDateTime), OffsetDateTimeMessagePackFormatter.Instance},
             {typeof(ZonedDateTime), ZonedDateTimeMessagePackFormatter.Instance},
