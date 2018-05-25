@@ -90,8 +90,51 @@ while the string is serialized using the MessagePack base class into a 'fixstr'.
   
 </table>
 
+## Limitations
+### Nanoseconds
+If you want too serialize a LocalDateTime and you add nanoseconds on to the value, once serialized there is precision loss as the LocalDateTime goes to DateTime, then into bytes. DateTime does not have nanosecond accuracy so as mentioned previously there is precision loss. 
+An example of this is shown below:
+```csharp
+LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0).PlusNanoseconds(1);
+
+var localDateTimeBinary = MessagePackSerializer.Serialize(ldt);
+var res = MessagePackSerializer.Deserialize<LocalDateTime>(localDateTimeBinary);
+
+// ldt != res, after serialization 'ldt' is converted to a DateTime hence nanosecond accuracy is lost.
+```
+
+If you were too serialize a LocalDateTime with no time values but with added nanoseconds, and then deserialize it as a LocalDate, 
+it will work even though it technically has a value for time.
+```csharp
+LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0).PlusNanoseconds(1);
+
+var localDateTimeBinary = MessagePackSerializer.Serialize(ldt);
+var localDateResult = MessagePackSerializer.Deserialize<LocalDate>(bin);
+
+// This will not throw an error, as when it is serialized the nanosecond accuracy is lost.
+```
+
+The lowest level of precision common to NodaTime and the C# DateTime is ticks.
+```csharp
+LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0).PlusNanoseconds(100);
+
+var localDateTimeBinary = MessagePackSerializer.Serialize(ldt);
+var res = MessagePackSerializer.Deserialize<LocalDate>(localDateTimeBinary);
+
+// ldt == res, This will work as 100 nanoseconds == 1 tick, so it can be recognised as a time value.
+```
+If you were too serialize a LocalDateTime with no time values but with added ticks, and then deserialize it as a LocalDate, 
+it will throw an error as ticks can be recognised as a time value by C# DateTime.
+```csharp
+LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0).PlusTicks(1);
+
+var localDateTimeBinary = MessagePackSerializer.Serialize(ldt);
+var res = MessagePackSerializer.Deserialize<LocalDate>(localDateTimeBinary);
+
+// The above will not work as it can recognise that there has been a time value added.
+```
 ## Contributing
-Please read [CONTRIBUTING.md]() for details on our code of conduct, and the process for submitting pull requests to us.
+*TBC*
 
 ## Links
 * [Nuget]()
