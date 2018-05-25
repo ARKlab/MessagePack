@@ -70,40 +70,26 @@ var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
 :heavy_exclamation_mark: Deserializing a LocalDateTime into a LocalDate, will not work if the time value is not 0.
 
 ### NodaTime serialized formats
-#### Instant
-When an Instant is serialized, like LocalDateTime and LocalDate, it goes to timestamp format. Depending on the value of the Instant, 
-it will fall into either timestamp 32, 64, or 96 format, as explained [above](https://github.com/ARKlab/MessagePack/blob/feature/Create-Nodatime-Extensions/README.md#timestamps).
-
-#### LocalDate
-Once a LocalDate is serialized it is in timestamp format. Depending on the value of the LocalDate, it will fall into either 
-timestamp 32, 64 or 96. LocalDate has no time values.
-
-#### LocalDateTime
-Once a LocalDate is serialized it is in timestamp format. Depending on the value of the LocalDate, it will fall into either 
-timestamp 32, 64 or 96. LocalDateTime can be deserialized into a LocalDate if it has no time part.
-
-#### LocalTime
-LocalTime is serialized into an int64 (64 bit int) from. The int64 contains the LocalTime value in nanoseconds.
-
-#### Offset
-Offset is serialized into an int32 (32 bit int). The int32 contains the Offset value in seconds.
-
-#### OffsetDateTime
-When an Offset is serialized, it split up into into the Offset and LocalDateTime parts.
+<table>
+  <tr><th>NodaTime type</th><th>Serialization format</th></tr>
+  <tr><td>Instant</td><td>When an Instant is serialized, like LocalDateTime and LocalDate, it goes to timestamp format. Depending on the value of the Instant, it will fall into either timestamp 32, 64, or 96 format, as explained above under the Timestamp heading.</td></tr>
+  <tr><td>LocalDate</td><td>Once a LocalDate is serialized it is in timestamp format. Depending on the value of the LocalDate, it will fall into either timestamp 32, 64 or 96. LocalDate has no time values.</td></tr>
+  <tr><td>LocalDateTime</td><td>Once a LocalDate is serialized it is in timestamp format. Depending on the value of the LocalDate, it will fall into either timestamp 32, 64 or 96. LocalDateTime can be deserialized into a LocalDate if it has no time part.</td></tr>
+  <tr><td>LocalTime</td><td>LocalTime is serialized into an int64 (64 bit int) from. The int64 contains the LocalTime value in nanoseconds.</td></tr>
+  <tr><td>Offset</td><td>Offset is serialized into an int32 (32 bit int). The int32 contains the Offset value in seconds.</td></tr>
+  <tr><td>OffsetDateTime</td><td>When an Offset is serialized, it split up into into the Offset and LocalDateTime parts.
 They are then serialized using there respective formatters. 
 This means the serialized OffsetDateTime will be put into an array of 2 elements.
-The Offset and LocalDateTime serialization is explained in the headings above.
-
-#### Period
-When the NodaTime type Period is serialized, it is split into a 'fixarray'. 
-For a Period we have a 10 element array of four int32 amd six int64 respectively, represented in the sort order of - 
-Years, Months, Weeks, Days, Hours, Minutes, Seconds, Milliseconds, Ticks, Nanoseconds.
-
-#### ZonedDateTime
-A ZonedDateTime is split up into LocalDateTime, an Offset and a string representing a Zone, during serialization.
+The Offset and LocalDateTime serialization is explained in the headings above.</td></tr>
+  <tr><td>Period</td><td>When the NodaTime type Period is serialized, it is split into a 'fixarray'. 
+For a Period we have a 10 element array of four int32 amd six int64 respectively, represented in the order of → 
+Years, Months, Weeks, Days, Hours, Minutes, Seconds, Milliseconds, Ticks, Nanoseconds.</td></tr>
+  <tr><td>ZonedDateTime</td><td>A ZonedDateTime is split up into LocalDateTime, an Offset and a string representing a Zone, during serialization.
 This means the ZonedDateTime is put into an array of 3 elements.
 Each NodaTime type is serialized using there respective formatters, 
-while the string is serialized using the MessagePack base class into a 'fixstr'.
+while the string is serialized using the MessagePack base class into a 'fixstr'.</td></tr>
+  
+</table>
 
 ## Contributing
 Please read [CONTRIBUTING.md]() for details on our code of conduct, and the process for submitting pull requests to us.
