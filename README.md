@@ -52,9 +52,9 @@ An example of this in C# is shown below:
 LocalDateTime ldt = LocalDateTime.FromDateTime(DateTime.Now);
 // This date is within the range for timestamp32
 
-var bin = MessagePackSerializer.Serialize(ldt);
+var localDateTimeBinary = MessagePackSerializer.Serialize(ldt);
 // Once serialized we can expect the format to be [0xd6, -1, data] (format, extension type, data in bytes),
-// and ‘bin’ to be a byte array of size 6
+// and ‘localDateTimeBinary’ to be a byte array of size 6
 ```
 
 #### Deserialization
@@ -64,8 +64,7 @@ From a timestamp, we can deserialize into a LocalDate (if time part is 0), Local
 
 From the snippet of code in serialization, shown below is deserialization:
 ```csharp
-var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
-// the data is put back into a LocalDateTime variable, coming from 'bin' in serialization
+var res = MessagePackSerializer.Deserialize<LocalDateTime>(localDateTimeBinary);
 ```
 :heavy_exclamation_mark: Deserializing a LocalDateTime into a LocalDate, will not work if the time value is not 0.
 
