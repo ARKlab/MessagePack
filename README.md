@@ -108,6 +108,10 @@ var result = MessagePackSerializer.Deserialize<LocalDateTime>(localDateTimeBinar
 
 // ldt == result, returns truncated value equal to 1 tick.
 ```
+
+### UTC
+In the base [MessagePack](https://github.com/neuecc/MessagePack-CSharp) library, DateTime values are converted to UTC before being serialized. While using our library, you must specify DateTimeKind as UTC before serializing when using DateTime and the LocalDateTime type, and expect it as UTC when deserializing.
+
 ## Interoperability
 As explained previously, we use the timestamp format for some of our serialized NodaTime types. The timestamp format is interoperable with [MessagePack for C#](https://github.com/neuecc/MessagePack-CSharp), the official [MsgPack library](https://github.com/msgpack/msgpack/blob/master/spec.md) and any other MessagePack implementations that support the extension type of -1.
 
