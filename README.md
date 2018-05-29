@@ -108,6 +108,8 @@ var result = MessagePackSerializer.Deserialize<LocalDateTime>(localDateTimeBinar
 
 // ldt == result, returns truncated value equal to 1 tick.
 ```
+### Interoperability
+As explained previously, we use the timestamp format for some of our serialized NodaTime types. The timestamp format is interoperable with [MessagePack for C#](https://github.com/neuecc/MessagePack-CSharp), the official [MsgPack library](https://github.com/msgpack/msgpack/blob/master/spec.md) and any other MessagePack implementations that support the extension type of -1.
 
 ## Contributing
 *TBC*
