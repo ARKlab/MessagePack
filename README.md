@@ -121,7 +121,7 @@ As explained previously, we use the timestamp format for some of our serialized 
 
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/ARKlab/MessagePack/blob/feature/Create-Nodatime-Extensions/LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/ARKlab/MessagePack/blob/master/LICENSE) file for details
 
 ## Acknowledgments
 * [MessagePack for C#](https://github.com/neuecc/MessagePack-CSharp)
