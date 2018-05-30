@@ -1,18 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net45;netstandard1.6</TargetFrameworks>
     <ApplicationIcon />
     <Win32Resource />
     <OutputType>Library</OutputType>
     <StartupObject />
+
+    <PackageId>MessagePack.NodaTime</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+
     <PackageProjectUrl>https://github.com/ARKlab/MessagePack</PackageProjectUrl>
-    <Copyright />
+    <PackageLicenseUrl>https://github.com/ARKlab/MessagePack/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>http://www.ark-energy.eu/wp-content/uploads/ark-dark.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/ARKlab/MessagePack</RepositoryUrl>
+
+    <Title>MessagePack.NodaTime</Title>
+    <Description>This library adds support for NodaTime types to MessagePack C#.</Description>
+    <Authors>ARK Labs</Authors>
+    <Copyright>Copyright (C) 2018 ARK LTD</Copyright>
+
+    <PackageTags>MessagePack;MsgPack;NodaTime;Serialize;Serialization;Ark;C#;Formatter;Resolver;DateTime;Visual Studio;.NET;Framework</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="1.7.3.4" />
     <PackageReference Include="NodaTime" Version="2.3.0" />
   </ItemGroup>
-
 </Project>
