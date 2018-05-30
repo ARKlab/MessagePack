@@ -71,7 +71,7 @@ var res = MessagePackSerializer.Deserialize<LocalDateTime>(localDateTimeBinary);
   <tr><th>NodaTime type</th><th>Serialization format</th></tr>
   <tr><td>Instant</td><td>When an Instant is serialized, like LocalDateTime and LocalDate, it goes to timestamp format. Depending on the value of the Instant, it will fall into either timestamp 32, 64, or 96 format, as explained above under the Timestamp heading.</td></tr>
   <tr><td>LocalDate</td><td>Once a LocalDate is serialized it is in timestamp format. Depending on the value of the LocalDate, it will fall into either timestamp 32, 64 or 96. LocalDate has no time values.</td></tr>
-  <tr><td>LocalDateTime</td><td>Once a LocalDate is serialized it is in timestamp format. This means an exteension type of -1 will be received by MessagePack. LocalDateTime can be deserialized into a LocalDate if it has no time part.</td></tr>
+  <tr><td>LocalDateTime</td><td>Once a LocalDate is serialized it is in timestamp format. This means an extension type of -1 will be received by MessagePack. LocalDateTime can be deserialized into a LocalDate if it has no time part.</td></tr>
   <tr><td>LocalTime</td><td>LocalTime is serialized into an int64 (64 bit int). The int64 contains the LocalTime value in nanoseconds.</td></tr>
   <tr><td>Offset</td><td>Offset is serialized into an int32 (32 bit int). The int32 contains the Offset value in seconds.</td></tr>
   <tr><td>OffsetDateTime</td><td>When an Offset is serialized, it is split up into into the LocalDateTime and Offset parts.
