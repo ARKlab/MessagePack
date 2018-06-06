@@ -20,7 +20,17 @@ In the Package Manager Console -
 Install-Package MessagePack.NodaTime
 ```
 or download directly from NuGet.
-
+## How to use
+To use the NodaTime resolver, you will have to add it to the composite resolver, as shown in the example below:
+```csharp
+ CompositeResolver.RegisterAndSetAsDefault(
+            BuiltinResolver.Instance,
+            NodatimeResolver.Instance,
+            AttributeFormatterResolver.Instance,
+            DynamicEnumAsStringResolver.Instance,
+            ContractlessStandardResolver.Instance
+            );
+```
 ## Quick Start
 For more information on either MessagePack or NodaTime, please follow the respective links below. 
 * [MesssagePack](https://github.com/neuecc/MessagePack-CSharp/blob/master/README.md)
@@ -119,7 +129,7 @@ As explained previously, we use the timestamp format for some of our serialized 
 *TBC*
 
 ## Links
-* [Nuget]()
+* [Nuget](https://www.nuget.org/packages/MessagePack.NodaTime/)
 * [Github](https://github.com/ARKlab/MessagePack)
 * [Ark Energy](http://www.ark-energy.eu/)
 
