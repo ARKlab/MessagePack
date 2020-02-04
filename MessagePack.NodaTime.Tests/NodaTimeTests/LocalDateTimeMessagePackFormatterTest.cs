@@ -57,7 +57,8 @@ namespace MessagePack.NodaTime.Tests
             LocalDateTime ldt = new LocalDateTime(2018, 5, 15, 1, 0, 0).PlusTicks(1);
             var bin = MessagePackSerializer.Serialize(ldt);
 
-            Assert.Throws<InvalidOperationException>(() => (MessagePackSerializer.Deserialize<LocalDate>(bin)));
+            TestTools.ThrowsInner<InvalidOperationException>(() => 
+            (MessagePackSerializer.Deserialize<LocalDate>(bin)));
         }
 
         [Fact]

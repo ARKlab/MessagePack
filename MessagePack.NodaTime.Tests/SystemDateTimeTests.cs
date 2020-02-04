@@ -88,7 +88,7 @@ namespace MessagePack.NodaTime.Tests
         {
             DateTime dt = new DateTime(2000, 1, 1, 0, 0, 1);
 
-            Assert.Throws<InvalidOperationException>(() => 
+            TestTools.ThrowsInner<InvalidOperationException>(() => 
             (MessagePackSerializer.Deserialize<LocalDate>(MessagePackSerializer.Serialize(dt))));
         }
 
@@ -97,7 +97,7 @@ namespace MessagePack.NodaTime.Tests
         {
             LocalDateTime ldt = new LocalDateTime(2000, 1, 1, 0, 0, 0, 1);
 
-            Assert.Throws<InvalidOperationException>(() =>
+            TestTools.ThrowsInner<InvalidOperationException>(() =>
             (MessagePackSerializer.Deserialize<LocalDate>(MessagePackSerializer.Serialize(ldt))));            
         }
 

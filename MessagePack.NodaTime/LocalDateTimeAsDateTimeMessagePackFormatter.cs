@@ -11,15 +11,15 @@ namespace MessagePack.NodaTime
     {
         public static readonly LocalDateTimeAsDateTimeMessagePackFormatter Instance = new LocalDateTimeAsDateTimeMessagePackFormatter();
 
-        public LocalDateTime Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public LocalDateTime Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            var dt = MessagePackBinary.ReadDateTime(bytes, offset, out readSize);
+            var dt = reader.ReadDateTime();
             return LocalDateTime.FromDateTime(dt);
         }
 
-        public int Serialize(ref byte[] bytes, int offset, LocalDateTime value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, LocalDateTime value, MessagePackSerializerOptions options)
         {
-            return MessagePackBinary.WriteDateTime(ref bytes, offset, DateTime.SpecifyKind(value.ToDateTimeUnspecified(), DateTimeKind.Utc));
+            writer.Write(DateTime.SpecifyKind(value.ToDateTimeUnspecified(), DateTimeKind.Utc));
         }
     }
 }
