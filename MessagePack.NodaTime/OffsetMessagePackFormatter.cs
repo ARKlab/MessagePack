@@ -10,15 +10,15 @@ namespace MessagePack.NodaTime
     {
         public static readonly OffsetMessagePackFormatter Instance = new OffsetMessagePackFormatter();
 
-        public Offset Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public Offset Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            var seconds = MessagePackBinary.ReadInt32(bytes, offset, out readSize);
+            var seconds = reader.ReadInt32();
             return Offset.FromSeconds(seconds);
         }
 
-        public int Serialize(ref byte[] bytes, int offset, Offset value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, Offset value, MessagePackSerializerOptions options)
         {
-            return MessagePackBinary.WriteInt32(ref bytes, offset, value.Seconds);
+            writer.WriteInt32(value.Seconds);
         }
     }
 }

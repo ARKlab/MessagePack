@@ -94,8 +94,8 @@ namespace MessagePack.NodaTime.Tests
         public void ObjectWithNonGeneric()
         {
             object o = new LocalDateTime();
-            var bin = MessagePackSerializer.NonGeneric.Serialize(o.GetType(), o);
-            var res = MessagePackSerializer.NonGeneric.Deserialize(o.GetType(), bin);
+            var bin = MessagePackSerializer.Serialize(o.GetType(), o);
+            var res = MessagePackSerializer.Deserialize(o.GetType(), bin);
 
             Assert.Equal(o, res);
         }

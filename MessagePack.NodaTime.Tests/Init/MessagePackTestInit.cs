@@ -10,13 +10,19 @@ namespace MessagePack.NodaTime.Tests.Utils
     {
         public ResolverFixture()
         {
-            CompositeResolver.RegisterAndSetAsDefault(
-            BuiltinResolver.Instance,
-            NodatimeResolver.Instance,
-            AttributeFormatterResolver.Instance,
-            DynamicEnumAsStringResolver.Instance,
-            ContractlessStandardResolver.Instance
+            var resolver = CompositeResolver.Create(new[] {
+                BuiltinResolver.Instance,
+                NodatimeResolver.Instance,
+                AttributeFormatterResolver.Instance,
+                DynamicEnumAsStringResolver.Instance,
+                ContractlessStandardResolver.Instance
+            }
             );
+
+            var options = MessagePackSerializerOptions.Standard.WithResolver(resolver);
+
+            // pass options to every time or set as default
+            MessagePackSerializer.DefaultOptions = options;
         }
     }
     [CollectionDefinition("ResolverCollection")]

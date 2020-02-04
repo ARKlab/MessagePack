@@ -20,16 +20,16 @@ namespace MessagePack.NodaTime
         // GetFormatter<T>'s get cost should be minimized so use type cache.
         public IMessagePackFormatter<T> GetFormatter<T>()
         {
-            return FormatterCache<T>.formatter;
+            return FormatterCache<T>.Formatter;
         }
 
         static class FormatterCache<T>
         {
-            public static readonly IMessagePackFormatter<T> formatter;
+            public static readonly IMessagePackFormatter<T> Formatter;
 
             // generic's static constructor should be minimized for reduce type generation size!
             // use outer helper method.
-            static FormatterCache() => formatter = (IMessagePackFormatter<T>)NodatimeResolverGetFormatterHelper.GetFormatter(typeof(T));
+            static FormatterCache() => Formatter = (IMessagePackFormatter<T>)NodatimeResolverGetFormatterHelper.GetFormatter(typeof(T));
         }
     }
 

@@ -11,28 +11,30 @@ namespace MessagePack.NodaTime
     public sealed class PeriodAsIsoStringMessagePackFormatter : IMessagePackFormatter<Period>
     {
         public static readonly PeriodAsIsoStringMessagePackFormatter Instance = new PeriodAsIsoStringMessagePackFormatter();
-
-        public Period Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        
+        public Period Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            if (MessagePackBinary.IsNil(bytes, offset))
+            if (reader.IsNil)
             {
-                readSize = 1;
                 return null;
             }
 
-            var s = MessagePackBinary.ReadString(bytes, offset, out readSize);
+            var s = reader.ReadString();
             if (s.Length == 0)
                 return Period.Zero;
 
             return PeriodPattern.Roundtrip.Parse(s).GetValueOrThrow();
         }
 
-        public int Serialize(ref byte[] bytes, int offset, Period value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, Period value, MessagePackSerializerOptions options)
         {
             if (value == null)
-                return MessagePackBinary.WriteNil(ref bytes, offset);
+            {
+                writer.WriteNil();
+                return;
+            }
 
-            return MessagePackBinary.WriteString(ref bytes, offset, PeriodPattern.Roundtrip.Format(value));
+            writer.Write(PeriodPattern.Roundtrip.Format(value));
         }
     }
 
@@ -40,42 +42,25 @@ namespace MessagePack.NodaTime
     {
         public static readonly PeriodAsIntArrayMessagePackFormatter Instance = new PeriodAsIntArrayMessagePackFormatter();
 
-        public Period Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public Period Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            if (MessagePackBinary.IsNil(bytes, offset))
+            if (reader.IsNil)
             {
-                readSize = 1;
                 return null;
             }
-            var startOffset = offset;
-
-            var count = MessagePackBinary.ReadArrayHeader(bytes, offset, out readSize);
-            offset += readSize;
+            var count = reader.ReadArrayHeader();
             if (count != 10) throw new InvalidOperationException("Invalid array count");
 
-            var years = MessagePackBinary.ReadInt32(bytes, offset, out readSize);
-            offset += readSize;
-            var months = MessagePackBinary.ReadInt32(bytes, offset, out readSize);
-            offset += readSize;
-            var weeks = MessagePackBinary.ReadInt32(bytes, offset, out readSize);
-            offset += readSize;
-            var days = MessagePackBinary.ReadInt32(bytes, offset, out readSize);
-            offset += readSize;
-            var hours = MessagePackBinary.ReadInt64(bytes, offset, out readSize);
-            offset += readSize;
-            var minutes = MessagePackBinary.ReadInt64(bytes, offset, out readSize);
-            offset += readSize;
-            var seconds = MessagePackBinary.ReadInt64(bytes, offset, out readSize);
-            offset += readSize;
-            var milliseconds = MessagePackBinary.ReadInt64(bytes, offset, out readSize);
-            offset += readSize;
-            var ticks = MessagePackBinary.ReadInt64(bytes, offset, out readSize);
-            offset += readSize;
-            var nano = MessagePackBinary.ReadInt64(bytes, offset, out readSize);
-            offset += readSize;
-
-
-            readSize = offset - startOffset;
+            var years = reader.ReadInt32();
+            var months = reader.ReadInt32();
+            var weeks = reader.ReadInt32();
+            var days = reader.ReadInt32();
+            var hours = reader.ReadInt64();
+            var minutes = reader.ReadInt64();
+            var seconds = reader.ReadInt64();
+            var milliseconds = reader.ReadInt64();
+            var ticks = reader.ReadInt64();
+            var nano = reader.ReadInt64();
 
             return new PeriodBuilder()
             {
@@ -89,29 +74,29 @@ namespace MessagePack.NodaTime
                 Milliseconds = milliseconds,
                 Ticks = ticks,
                 Nanoseconds = nano,
-            }.Build();
+            }
+            .Build();
         }
 
-        public int Serialize(ref byte[] bytes, int offset, Period value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, Period value, MessagePackSerializerOptions options)
         {
             if (value == null)
-                return MessagePackBinary.WriteNil(ref bytes, offset);
+            {
+                writer.WriteNil();
+                return;
+            }
 
-            var startOffset = offset;
-
-            offset += MessagePackBinary.WriteFixedArrayHeaderUnsafe(ref bytes, offset, 10);
-            offset += MessagePackBinary.WriteInt32(ref bytes, offset, value.Years);
-            offset += MessagePackBinary.WriteInt32(ref bytes, offset, value.Months);
-            offset += MessagePackBinary.WriteInt32(ref bytes, offset, value.Weeks);
-            offset += MessagePackBinary.WriteInt32(ref bytes, offset, value.Days);
-            offset += MessagePackBinary.WriteInt64(ref bytes, offset, value.Hours);
-            offset += MessagePackBinary.WriteInt64(ref bytes, offset, value.Minutes);
-            offset += MessagePackBinary.WriteInt64(ref bytes, offset, value.Seconds);
-            offset += MessagePackBinary.WriteInt64(ref bytes, offset, value.Milliseconds);
-            offset += MessagePackBinary.WriteInt64(ref bytes, offset, value.Ticks);
-            offset += MessagePackBinary.WriteInt64(ref bytes, offset, value.Nanoseconds);
-
-            return offset - startOffset;
+            writer.WriteArrayHeader(10);
+            writer.WriteInt32(value.Years);
+            writer.WriteInt32(value.Months);
+            writer.WriteInt32(value.Weeks);
+            writer.WriteInt32(value.Days);
+            writer.WriteInt64(value.Hours);
+            writer.WriteInt64(value.Minutes);
+            writer.WriteInt64(value.Seconds);
+            writer.WriteInt64(value.Milliseconds);
+            writer.WriteInt64(value.Ticks);
+            writer.WriteInt64(value.Nanoseconds);
         }
     }
 }

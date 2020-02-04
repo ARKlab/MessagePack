@@ -7,7 +7,7 @@ using System;
 
 namespace MessagePack.NodaTime
 {
-    // Not supported
+    // Not interoperable
     public sealed class LocalDateAsExtMessagePackFormatter : IMessagePackFormatter<LocalDate>
     {
         public static readonly LocalDateAsExtMessagePackFormatter Instance = new LocalDateAsExtMessagePackFormatter();
@@ -25,17 +25,7 @@ namespace MessagePack.NodaTime
         internal const int MonthMask = ((1 << MonthBits) - 1) << CalendarDayBits;
         internal const int YearMask = ((1 << YearBits) - 1) << CalendarDayMonthBits;
 
-        public LocalDate Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
-        {
-            var v = MessagePackBinary.ReadInt32(bytes, offset, out readSize);
-            var year = unchecked(((v & YearMask) >> CalendarDayMonthBits) + 1);
-            var month = unchecked(((v & MonthMask) >> CalendarDayBits) + 1);
-            var day = unchecked(((v & DayMask) >> CalendarBits) + 1);
-
-            return new LocalDate(year, month, day);
-        }
-
-        public int Serialize(ref byte[] bytes, int offset, LocalDate value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, LocalDate value, MessagePackSerializerOptions options)
         {
             uint v = 0;
             unchecked
@@ -47,36 +37,47 @@ namespace MessagePack.NodaTime
                         0
                     );
             }
+            byte[] b = { MessagePackCode.FixExt4
+                          , unchecked((byte)NodatimeMessagePackExtensionTypeCode.LocalDate)
+                          , unchecked((byte)(v >> 24))
+                          , unchecked((byte)(v >> 16))
+                          , unchecked((byte)(v >> 8))
+                          , unchecked((byte)v)
+                };
 
-            MessagePackBinary.EnsureCapacity(ref bytes, offset, 6);
-            bytes[offset] = MessagePackCode.FixExt4;
-            bytes[offset + 1] = unchecked((byte)NodatimeMessagePackExtensionTypeCode.LocalDate);
-            bytes[offset + 2] = unchecked((byte)(v >> 24));
-            bytes[offset + 3] = unchecked((byte)(v >> 16));
-            bytes[offset + 4] = unchecked((byte)(v >> 8));
-            bytes[offset + 5] = unchecked((byte)v);
-            return 6;
+            writer.WriteRaw(b);
+        }
+
+        public LocalDate Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+            var v = reader.ReadInt32();
+            var year = unchecked(((v & YearMask) >> CalendarDayMonthBits) + 1);
+            var month = unchecked(((v & MonthMask) >> CalendarDayBits) + 1);
+            var day = unchecked(((v & DayMask) >> CalendarBits) + 1);
+
+            return new LocalDate(year, month, day);
         }
     }
+
     // Supported
     public sealed class LocalDateAsDatetimeMessagePackFormatter : IMessagePackFormatter<LocalDate>
     {
         public static readonly LocalDateAsDatetimeMessagePackFormatter Instance = new LocalDateAsDatetimeMessagePackFormatter();
 
-        public LocalDate Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public LocalDate Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            var dt = MessagePackBinary.ReadDateTime(bytes, offset, out readSize);
+            var dt = reader.ReadDateTime();
             LocalDateTime ldt = LocalDateTime.FromDateTime(dt);
-            
+
             if (ldt.TimeOfDay != LocalTime.Midnight)
-                throw new InvalidOperationException($"code is invalid. code:{bytes[offset]} format:{MessagePackCode.ToFormatName(bytes[offset])}");
+                throw new InvalidOperationException($"Local Date should not contain time part. Found {ldt.TimeOfDay} instead of midnight");
 
             return LocalDate.FromDateTime(dt);
         }
 
-        public int Serialize(ref byte[] bytes, int offset, LocalDate value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, LocalDate value, MessagePackSerializerOptions options)
         {
-            return MessagePackBinary.WriteDateTime(ref bytes, offset, DateTime.SpecifyKind(value.ToDateTimeUnspecified(), DateTimeKind.Utc));
+            writer.Write(DateTime.SpecifyKind(value.ToDateTimeUnspecified(), DateTimeKind.Utc));
         }
     }
 }
