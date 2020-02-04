@@ -7,23 +7,49 @@
     <StartupObject />
 
     <PackageId>MessagePack.NodaTime</PackageId>
-    <PackageVersion>2.0.0</PackageVersion>
+    <PackageVersion>2.0.1</PackageVersion>
 
     <PackageProjectUrl>https://github.com/ARKlab/MessagePack</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/ARKlab/MessagePack/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageIconUrl>http://www.ark-energy.eu/wp-content/uploads/ark-dark.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/ARKlab/MessagePack</RepositoryUrl>
 
+    <PackageIcon>ark-dark.png</PackageIcon>
+    <RepositoryUrl>https://github.com/ARKlab/MessagePack</RepositoryUrl>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+   
     <Title>MessagePack.NodaTime</Title>
     <Description>This library adds support for NodaTime types to MessagePack C#.</Description>
     <Authors>ARK Labs</Authors>
-    <Copyright>Copyright (C) 2018 ARK LTD</Copyright>
+    <Copyright>Copyright (C) 2020 ARK LTD</Copyright>
 
     <PackageTags>MessagePack;MsgPack;NodaTime;Serialize;Serialization;Ark;C#;Formatter;Resolver;DateTime;Visual Studio;.NET;Framework</PackageTags>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\ark-dark.png" Pack="true" PackagePath="\"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+  
+
+  <Target Name="PushNugetPackage" AfterTargets="Pack" Condition="('$(Configuration)' == 'Release' And $(VersionSuffix) == '') Or ('$(Configuration)' == 'Debug' And $(VersionSuffix) != '')">
+    <Exec Command="dotnet nuget push -s https://api.nuget.org/v3/index.json $(MSBuildProjectDirectory)\$(OutputPath)$(PackageId).$(PackageVersion).nupkg" />
+    <!--<Exec Command="dotnet nuget push -s https://nuget.smbsrc.net/ $(MSBuildProjectDirectory)\$(OutputPath)$(PackageId).$(PackageVersion).symbols.nupkg" />-->
+  </Target>
+
 
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="2.1.80" />
     <PackageReference Include="NodaTime" Version="2.4.7" />
   </ItemGroup>
+  
 </Project>
