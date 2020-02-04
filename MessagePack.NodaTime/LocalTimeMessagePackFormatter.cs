@@ -10,15 +10,15 @@ namespace MessagePack.NodaTime
     {
         public static readonly LocalTimeAsNanosecondsMessagePackFormatter Instance = new LocalTimeAsNanosecondsMessagePackFormatter();
 
-        public LocalTime Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public LocalTime Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            var nanos = MessagePackBinary.ReadInt64(bytes, offset, out readSize);
+            var nanos = reader.ReadInt64();
             return LocalTime.Midnight.PlusNanoseconds(nanos);
         }
 
-        public int Serialize(ref byte[] bytes, int offset, LocalTime value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, LocalTime value, MessagePackSerializerOptions options)
         {
-            return MessagePackBinary.WriteInt64(ref bytes, offset, value.NanosecondOfDay);
+            writer.WriteInt64(value.NanosecondOfDay);
         }
     }
 }

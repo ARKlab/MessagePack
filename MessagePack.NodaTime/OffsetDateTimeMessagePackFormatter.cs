@@ -10,37 +10,28 @@ namespace MessagePack.NodaTime
     public sealed class OffsetDateTimeMessagePackFormatter : IMessagePackFormatter<OffsetDateTime>
     {
         public static readonly OffsetDateTimeMessagePackFormatter Instance = new OffsetDateTimeMessagePackFormatter();
-
-        public OffsetDateTime Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        
+        public OffsetDateTime Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            var startOffset = offset;
+            var count = reader.ReadArrayHeader();
+            
+            if (count != 2) 
+                throw new InvalidOperationException("Invalid array count");
 
-            var count = MessagePackBinary.ReadArrayHeader(bytes, offset, out readSize);
-            offset += readSize;
-            if (count != 2) throw new InvalidOperationException("Invalid array count");
-
-            var dt = LocalDateTimeAsDateTimeMessagePackFormatter.Instance.Deserialize(bytes, offset, formatterResolver, out readSize);
-            offset += readSize;
-            var off = OffsetMessagePackFormatter.Instance.Deserialize(bytes, offset, formatterResolver, out readSize);
-            offset += readSize;
-
-            readSize = offset - startOffset;
+            var dt = LocalDateTimeAsDateTimeMessagePackFormatter.Instance.Deserialize(ref reader, options);
+            var off = OffsetMessagePackFormatter.Instance.Deserialize(ref reader, options);
 
             return new OffsetDateTime(dt, off);
         }
 
-        public int Serialize(ref byte[] bytes, int offset, OffsetDateTime value, IFormatterResolver formatterResolver)
+        public void Serialize(ref MessagePackWriter writer, OffsetDateTime value, MessagePackSerializerOptions options)
         {
             var dt = value.LocalDateTime;
             var off = value.Offset;
 
-            var startOffset = offset;
-
-            offset += MessagePackBinary.WriteFixedArrayHeaderUnsafe(ref bytes, offset, 2);
-            offset += LocalDateTimeAsDateTimeMessagePackFormatter.Instance.Serialize(ref bytes, offset, dt, formatterResolver);
-            offset += OffsetMessagePackFormatter.Instance.Serialize(ref bytes, offset, off, formatterResolver);
-
-            return offset - startOffset;
+            writer.WriteArrayHeader(2);
+            LocalDateTimeAsDateTimeMessagePackFormatter.Instance.Serialize(ref writer, dt, options);
+            OffsetMessagePackFormatter.Instance.Serialize(ref writer, off, options);
         }
     }
 }

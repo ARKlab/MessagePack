@@ -10,15 +10,15 @@ namespace MessagePack.NodaTime
     {
         public static readonly InstantMessagePackFormatter Instance = new InstantMessagePackFormatter();
 
-        public Instant Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public Instant Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            var dt = MessagePackBinary.ReadDateTime(bytes, offset, out readSize);
+            var dt = reader.ReadDateTime();
             return Instant.FromDateTimeUtc(dt);
         }
-        
-        public int Serialize(ref byte[] bytes, int offset, Instant value, IFormatterResolver formatterResolver)
+
+        public void Serialize(ref MessagePackWriter writer, Instant value, MessagePackSerializerOptions options)
         {
-            return MessagePackBinary.WriteDateTime(ref bytes, offset, value.ToDateTimeUtc());
+            writer.Write(value.ToDateTimeUtc());
         }
     }
 }
