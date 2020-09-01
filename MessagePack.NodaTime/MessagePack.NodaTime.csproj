@@ -36,8 +36,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\ark-dark.png" Pack="true" PackagePath="\"/>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <None Include="..\ark-dark.png" Pack="true" PackagePath="\" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   
 
@@ -48,8 +48,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.1.80" />
-    <PackageReference Include="NodaTime" Version="2.4.7" />
+    <PackageReference Include="MessagePack" Version="2.1.165" />
+    <PackageReference Include="NodaTime" Version="3.0.0" />
   </ItemGroup>
   
 </Project>

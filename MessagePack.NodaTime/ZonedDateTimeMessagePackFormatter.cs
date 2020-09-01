@@ -21,7 +21,7 @@ namespace MessagePack.NodaTime
             var off = OffsetMessagePackFormatter.Instance.Deserialize(ref reader, options);
             var zoneId = reader.ReadString();
 
-            return new ZonedDateTime(dt, DateTimeZoneProviders.Serialization[zoneId], off);
+            return new ZonedDateTime(dt, DateTimeZoneProviders.Tzdb[zoneId], off);
         }
 
         public void Serialize(ref MessagePackWriter writer, ZonedDateTime value, MessagePackSerializerOptions options)
