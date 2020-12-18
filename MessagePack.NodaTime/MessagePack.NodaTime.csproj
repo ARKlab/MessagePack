@@ -7,7 +7,7 @@
     <StartupObject />
 
     <PackageId>MessagePack.NodaTime</PackageId>
-    <PackageVersion>2.1.0</PackageVersion>
+    <PackageVersion>2.2.0</PackageVersion>
 
     <PackageProjectUrl>https://github.com/ARKlab/MessagePack</PackageProjectUrl>
     <PackageLicense>MIT</PackageLicense>
@@ -22,7 +22,7 @@
     <Authors>ARK Labs</Authors>
     <Copyright>Copyright (C) 2020 ARK LTD</Copyright>
     <PackageReleaseNotes>
-      Update Nodatime to v3
+      Update Messagepack to v2.2 to add support for Records
     </PackageReleaseNotes>
 
     <PackageTags>MessagePack;MsgPack;NodaTime;Serialize;Serialization;Ark;C#;Formatter;Resolver;DateTime;Visual Studio;.NET;Framework</PackageTags>
@@ -34,8 +34,8 @@
 
     <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,8 +51,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.1.165" />
-    <PackageReference Include="NodaTime" Version="3.0.0" />
+    <PackageReference Include="MessagePack" Version="2.2.85" />
+    <PackageReference Include="NodaTime" Version="3.0.3" />
   </ItemGroup>
   
 </Project>
