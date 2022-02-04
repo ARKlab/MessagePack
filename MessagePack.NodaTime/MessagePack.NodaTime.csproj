@@ -7,7 +7,7 @@
     <StartupObject />
 
     <PackageId>MessagePack.NodaTime</PackageId>
-    <PackageVersion>2.2.0</PackageVersion>
+    <PackageVersion>3.0.0</PackageVersion>
 
     <PackageProjectUrl>https://github.com/ARKlab/MessagePack</PackageProjectUrl>
     <PackageLicense>MIT</PackageLicense>
