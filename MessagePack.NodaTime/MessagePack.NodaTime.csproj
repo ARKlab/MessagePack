@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netcoreapp3.1;netstandard2.0;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net6.0;netcoreapp3.1;netstandard2.0</TargetFrameworks>
     <ApplicationIcon />
     <Win32Resource />
     <OutputType>Library</OutputType>
     <StartupObject />
 
     <PackageId>MessagePack.NodaTime</PackageId>
-    <PackageVersion>3.0.0</PackageVersion>
+    <PackageVersion>3.1.0</PackageVersion>
 
     <PackageProjectUrl>https://github.com/ARKlab/MessagePack</PackageProjectUrl>
     <PackageLicense>MIT</PackageLicense>
@@ -20,10 +20,11 @@
     <Title>MessagePack.NodaTime</Title>
     <Description>This library adds support for NodaTime types to MessagePack C#.</Description>
     <Authors>ARK Labs</Authors>
-    <Copyright>Copyright (C) 2020 ARK LTD</Copyright>
+	<Copyright>Copyright (C) 2023 ARK Energy LTD</Copyright>
     <PackageReleaseNotes>
-      Update Messagepack to v2.2 to add support for Records
-    </PackageReleaseNotes>
+		Add: support for net6
+		Breaking: remove support for .NET 5.0 (EOL)
+	</PackageReleaseNotes>
 
     <PackageTags>MessagePack;MsgPack;NodaTime;Serialize;Serialization;Ark;C#;Formatter;Resolver;DateTime;Visual Studio;.NET;Framework</PackageTags>
   </PropertyGroup>
@@ -51,8 +52,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.3.85" />
-    <PackageReference Include="NodaTime" Version="3.0.9" />
+    <PackageReference Include="MessagePack" Version="2.4.59" />
+    <PackageReference Include="NodaTime" Version="3.1.6" />
   </ItemGroup>
   
 </Project>
