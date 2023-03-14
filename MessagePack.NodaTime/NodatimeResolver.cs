@@ -11,31 +11,31 @@ namespace MessagePack.NodaTime
     public sealed class NodatimeResolver : IFormatterResolver
     {
         // Resolver should be singleton.
-        public static IFormatterResolver Instance = new NodatimeResolver();
+        public static readonly IFormatterResolver Instance = new NodatimeResolver();
 
         NodatimeResolver()
         {
         }
 
         // GetFormatter<T>'s get cost should be minimized so use type cache.
-        public IMessagePackFormatter<T> GetFormatter<T>()
+        public IMessagePackFormatter<T>? GetFormatter<T>()
         {
             return FormatterCache<T>.Formatter;
         }
 
         static class FormatterCache<T>
         {
-            public static readonly IMessagePackFormatter<T> Formatter;
+            public static readonly IMessagePackFormatter<T>? Formatter;
 
             // generic's static constructor should be minimized for reduce type generation size!
             // use outer helper method.
-            static FormatterCache() => Formatter = (IMessagePackFormatter<T>)NodatimeResolverGetFormatterHelper.GetFormatter(typeof(T));
+            static FormatterCache() => Formatter = (IMessagePackFormatter<T>?)NodatimeResolverGetFormatterHelper.GetFormatter(typeof(T));
         }
     }
 
     internal static class NodatimeResolverGetFormatterHelper
     {
-        static readonly Dictionary<Type, object> formatterMap = new Dictionary<Type, object>()
+        static readonly Dictionary<Type, object> _formatterMap = new Dictionary<Type, object>()
         {
             {typeof(Instant), InstantMessagePackFormatter.Instance},
             {typeof(LocalDate), LocalDateAsDatetimeMessagePackFormatter.Instance},
@@ -57,9 +57,9 @@ namespace MessagePack.NodaTime
             {typeof(ZonedDateTime?), new NullableFormatter<ZonedDateTime>() },
         };
 
-        internal static object GetFormatter(Type t)
+        internal static object? GetFormatter(Type t)
         {
-            if (formatterMap.TryGetValue(t, out var formatter))
+            if (_formatterMap.TryGetValue(t, out var formatter))
             {
                 return formatter;
             }

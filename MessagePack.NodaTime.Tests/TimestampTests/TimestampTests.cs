@@ -145,14 +145,14 @@ namespace MessagePack.NodaTime.Tests.TimestampTests
             Assert.Equal(10, ts32_64.Length);
         }
 
-        [Fact(Skip = "Nanos are under 100ns")]
-        public void LocalDateTimestamp32WithNanosFailing()
+        [Fact]
+        public void LocalDateTimestamp32WithNanosTruncating()
         {
             //only changes to timestamp64 if nanoseconds are 100 or more
             LocalDateTime ld1 = new LocalDateTime(1971, 01, 01, 00, 00, 00, 00).PlusNanoseconds(99);
 
-            var ts32_64 = MessagePackSerializer.Serialize(ld1); // a = timestamp64 (byte[10])
-            Assert.Equal(10, ts32_64.Length);
+            var ts32_64 = MessagePackSerializer.Serialize(ld1); // a != timestamp64 (byte[10])
+            Assert.Equal(6, ts32_64.Length);
         }
     }
 }

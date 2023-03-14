@@ -20,6 +20,8 @@ namespace MessagePack.NodaTime
             var dt = LocalDateTimeAsDateTimeMessagePackFormatter.Instance.Deserialize(ref reader, options);
             var off = OffsetMessagePackFormatter.Instance.Deserialize(ref reader, options);
             var zoneId = reader.ReadString();
+            if (zoneId == null)
+                throw new InvalidOperationException("ZoneId, 3rd member of array, cannot be null");
 
             return new ZonedDateTime(dt, DateTimeZoneProviders.Tzdb[zoneId], off);
         }

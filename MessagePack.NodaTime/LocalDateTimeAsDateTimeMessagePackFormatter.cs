@@ -19,7 +19,7 @@ namespace MessagePack.NodaTime
 
         public void Serialize(ref MessagePackWriter writer, LocalDateTime value, MessagePackSerializerOptions options)
         {
-            writer.Write(DateTime.SpecifyKind(value.ToDateTimeUnspecified(), DateTimeKind.Utc));
+            writer.Write(DateTime.SpecifyKind(value.ToDateTimeUnspecified(), DateTimeKind.Utc)); // cast to UTC to permit roundtrip
         }
     }
 }

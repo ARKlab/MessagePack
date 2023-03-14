@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29009.5
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagePack.NodaTime", "MessagePack.NodaTime\MessagePack.NodaTime.csproj", "{00D42F91-2E9A-4138-B667-1DE2A971F28D}"
 EndProject
@@ -9,7 +9,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6A7019F5-E02
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4C82ACD9-7737-4742-A657-336B2916D383}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagePack.NodaTime.Tests", "MessagePack.NodaTime.Tests\MessagePack.NodaTime.Tests.csproj", "{6752BA3A-6660-4B8C-9ECD-F6E03A848CB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagePack.NodaTime.Tests", "MessagePack.NodaTime.Tests\MessagePack.NodaTime.Tests.csproj", "{6752BA3A-6660-4B8C-9ECD-F6E03A848CB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF124151-0766-460F-A634-BA924ED65C5A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		global.json = global.json
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

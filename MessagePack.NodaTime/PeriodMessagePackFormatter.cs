@@ -2,17 +2,19 @@
 // Licensed under the MIT License. See LICENSE in the project root for
 // license information. 
 using MessagePack.Formatters;
+
 using NodaTime;
 using NodaTime.Text;
+
 using System;
 
 namespace MessagePack.NodaTime
 {
-    public sealed class PeriodAsIsoStringMessagePackFormatter : IMessagePackFormatter<Period>
+    public sealed class PeriodAsIsoStringMessagePackFormatter : IMessagePackFormatter<Period?>
     {
         public static readonly PeriodAsIsoStringMessagePackFormatter Instance = new PeriodAsIsoStringMessagePackFormatter();
-        
-        public Period Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+
+        public Period? Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
             if (reader.IsNil)
             {
@@ -20,13 +22,15 @@ namespace MessagePack.NodaTime
             }
 
             var s = reader.ReadString();
+            if (s == null) 
+                return null;
             if (s.Length == 0)
                 return Period.Zero;
 
             return PeriodPattern.Roundtrip.Parse(s).GetValueOrThrow();
         }
 
-        public void Serialize(ref MessagePackWriter writer, Period value, MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, Period? value, MessagePackSerializerOptions options)
         {
             if (value == null)
             {
@@ -38,11 +42,11 @@ namespace MessagePack.NodaTime
         }
     }
 
-    public sealed class PeriodAsIntArrayMessagePackFormatter : IMessagePackFormatter<Period>
+    public sealed class PeriodAsIntArrayMessagePackFormatter : IMessagePackFormatter<Period?>
     {
         public static readonly PeriodAsIntArrayMessagePackFormatter Instance = new PeriodAsIntArrayMessagePackFormatter();
 
-        public Period Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+        public Period? Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
             if (reader.IsNil)
             {
@@ -78,7 +82,7 @@ namespace MessagePack.NodaTime
             .Build();
         }
 
-        public void Serialize(ref MessagePackWriter writer, Period value, MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, Period? value, MessagePackSerializerOptions options)
         {
             if (value == null)
             {

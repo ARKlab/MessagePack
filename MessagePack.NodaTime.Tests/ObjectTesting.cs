@@ -22,13 +22,13 @@ namespace MessagePack.NodaTime.Tests
         [Fact]
         public void AnonType()
         {
-            var o = new { ldt = LocalDateTime.FromDateTime(DateTime.Now) };
+            var o = new { Ldt = LocalDateTime.FromDateTime(DateTime.Now) };
             var bin = MessagePackSerializer.Serialize(o);
             var res = MessagePackSerializer.Deserialize<object>(bin);
 
             var abc = ((IEnumerable)res).Cast<KeyValuePair<object, object>>().First().Value;
 
-            Assert.Equal(o.ldt.ToDateTimeUnspecified(), abc); // in DateTime format due to 'abc' being DateTime object
+            Assert.Equal(o.Ldt.ToDateTimeUnspecified(), abc); // in DateTime format due to 'abc' being DateTime object
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace MessagePack.NodaTime.Tests
             Assert.Equal(o, res);
         }
 
-        [Fact(Skip = "object cannot be serialized due to DateTime part of Nodatime type")]
+        [Fact]
         public void ObjectToLDT()
         {
             object o = new LocalDateTime();
@@ -61,7 +61,7 @@ namespace MessagePack.NodaTime.Tests
             Assert.Equal(o, res);
         }
 
-        [Fact(Skip = "object cannot be deserialized")]
+        [Fact]
         public void ObjectToInstant()
         {
             object o = new Instant();

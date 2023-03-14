@@ -1,59 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net6.0;netcoreapp3.1;netstandard2.0</TargetFrameworks>
-    <ApplicationIcon />
-    <Win32Resource />
-    <OutputType>Library</OutputType>
-    <StartupObject />
+	<PropertyGroup>
+		<ApplicationIcon />
+		<Win32Resource />
+		<OutputType>Library</OutputType>
+		<StartupObject />
 
-    <PackageId>MessagePack.NodaTime</PackageId>
-    <PackageVersion>3.1.0</PackageVersion>
+		<PackageId>MessagePack.NodaTime</PackageId>
 
-    <PackageProjectUrl>https://github.com/ARKlab/MessagePack</PackageProjectUrl>
-    <PackageLicense>MIT</PackageLicense>
+		<Title>MessagePack.NodaTime</Title>
+		<Description>This library adds support for NodaTime types to MessagePack C#.</Description>
 
-    <PackageIcon>ark-dark.png</PackageIcon>
-    <RepositoryUrl>https://github.com/ARKlab/MessagePack</RepositoryUrl>
-    <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-   
-    <Title>MessagePack.NodaTime</Title>
-    <Description>This library adds support for NodaTime types to MessagePack C#.</Description>
-    <Authors>ARK Labs</Authors>
-	<Copyright>Copyright (C) 2023 ARK Energy LTD</Copyright>
-    <PackageReleaseNotes>
-		Add: support for net6
-		Breaking: remove support for .NET 5.0 (EOL)
-	</PackageReleaseNotes>
+		<PackageReleaseNotes>
+			chore: update base libraries
+			feat: add support for nullable
+		</PackageReleaseNotes>
 
-    <PackageTags>MessagePack;MsgPack;NodaTime;Serialize;Serialization;Ark;C#;Formatter;Resolver;DateTime;Visual Studio;.NET;Framework</PackageTags>
-  </PropertyGroup>
+		<PackageTags>MessagePack;MsgPack;NodaTime;Serialize;Serialization;Ark;C#;Formatter;Resolver;DateTime;Visual Studio;.NET;Framework</PackageTags>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="MessagePack" Version="2.5.103" />
+		<PackageReference Include="NodaTime" Version="3.1.6" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\ark-dark.png" Pack="true" PackagePath="\" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-  </ItemGroup>
-  
-
-  <Target Name="PushNugetPackage" AfterTargets="Pack" Condition="('$(Configuration)' == 'Release' And $(VersionSuffix) == '') Or ('$(Configuration)' == 'Debug' And $(VersionSuffix) != '')">
-    <Exec Command="dotnet nuget push -s https://api.nuget.org/v3/index.json $(MSBuildProjectDirectory)\$(OutputPath)$(PackageId).$(PackageVersion).nupkg" />
-    <!--<Exec Command="dotnet nuget push -s https://nuget.smbsrc.net/ $(MSBuildProjectDirectory)\$(OutputPath)$(PackageId).$(PackageVersion).symbols.nupkg" />-->
-  </Target>
-
-
-  <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.4.59" />
-    <PackageReference Include="NodaTime" Version="3.1.6" />
-  </ItemGroup>
-  
 </Project>
