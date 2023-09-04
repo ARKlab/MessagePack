@@ -44,6 +44,7 @@ namespace MessagePack.NodaTime
 
             {typeof(Offset), OffsetMessagePackFormatter.Instance},
             {typeof(Period), PeriodAsIntArrayMessagePackFormatter.Instance},
+            {typeof(Duration), DurationAsBclTicksMessagePackFormatter.Instance },
 
             {typeof(OffsetDateTime), OffsetDateTimeMessagePackFormatter.Instance},
             {typeof(ZonedDateTime), ZonedDateTimeMessagePackFormatter.Instance},
@@ -55,6 +56,7 @@ namespace MessagePack.NodaTime
             {typeof(Offset?), new NullableFormatter<Offset>() },
             {typeof(OffsetDateTime?), new NullableFormatter<OffsetDateTime>() },
             {typeof(ZonedDateTime?), new NullableFormatter<ZonedDateTime>() },
+            {typeof(Duration?), new NullableFormatter<Duration>() },
         };
 
         internal static object? GetFormatter(Type t)
