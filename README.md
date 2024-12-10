@@ -24,11 +24,12 @@ or download directly from NuGet.
 To use the NodaTime resolver, you will have to add it to the composite resolver, as shown in the example below:
 ```csharp
  CompositeResolver.RegisterAndSetAsDefault(
-            BuiltinResolver.Instance,
-            NodatimeResolver.Instance,
-            AttributeFormatterResolver.Instance,
-            DynamicEnumAsStringResolver.Instance,
-            ContractlessStandardResolver.Instance
+                BuiltinResolver.Instance,
+                AttributeFormatterResolver.Instance,
+                SourceGeneratedFormatterResolver.Instance,
+                NodatimeResolver.Instance,
+                DynamicEnumAsStringResolver.Instance,
+                ContractlessStandardResolver.Instance
             );
 ```
 ## Quick Start

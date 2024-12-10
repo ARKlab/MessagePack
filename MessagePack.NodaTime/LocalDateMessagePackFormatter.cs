@@ -8,6 +8,7 @@ using System;
 namespace MessagePack.NodaTime
 {
     // Not interoperable
+    [ExcludeFormatterFromSourceGeneratedResolver]
     public sealed class LocalDateAsExtMessagePackFormatter : IMessagePackFormatter<LocalDate>
     {
         public static readonly LocalDateAsExtMessagePackFormatter Instance = new LocalDateAsExtMessagePackFormatter();
