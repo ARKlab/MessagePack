@@ -17,7 +17,7 @@ namespace MessagePack.NodaTime.Tests
     }
 
     [Collection("ResolverCollection")]
-    public class ObjectTesting
+    public class ContractlessTests
     {
         [Fact]
         public void AnonType()

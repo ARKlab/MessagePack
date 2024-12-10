@@ -12,8 +12,9 @@ namespace MessagePack.NodaTime.Tests.Utils
         {
             var resolver = CompositeResolver.Create(new[] {
                 BuiltinResolver.Instance,
-                NodatimeResolver.Instance,
                 AttributeFormatterResolver.Instance,
+                SourceGeneratedFormatterResolver.Instance,
+                NodatimeResolver.Instance,
                 DynamicEnumAsStringResolver.Instance,
                 ContractlessStandardResolver.Instance
             }
