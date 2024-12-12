@@ -10,6 +10,7 @@ using System;
 
 namespace MessagePack.NodaTime
 {
+    [ExcludeFormatterFromSourceGeneratedResolver]
     public sealed class PeriodAsIsoStringMessagePackFormatter : IMessagePackFormatter<Period?>
     {
         public static readonly PeriodAsIsoStringMessagePackFormatter Instance = new PeriodAsIsoStringMessagePackFormatter();

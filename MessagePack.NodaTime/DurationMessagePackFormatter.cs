@@ -10,6 +10,7 @@ using System;
 
 namespace MessagePack.NodaTime
 {
+    [ExcludeFormatterFromSourceGeneratedResolver]
     public sealed class DurationAsNanosecondsMessagePackFormatter : IMessagePackFormatter<Duration>
     {
         public static readonly DurationAsNanosecondsMessagePackFormatter Instance = new DurationAsNanosecondsMessagePackFormatter();
