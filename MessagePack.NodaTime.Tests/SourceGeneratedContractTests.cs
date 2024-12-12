@@ -47,7 +47,7 @@ namespace MessagePack.NodaTime.Tests
             var bin = MessagePackSerializer.Serialize(o);
             var res = MessagePackSerializer.Deserialize<MyClass>(bin);
 
-            Assert.Equal(o.LocalDateTime, res.LocalDateTime); // in DateTime format due to 'abc' being DateTime object
+            Assert.Equal(o, res); 
         }
     }
 }
