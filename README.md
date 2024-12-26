@@ -1,4 +1,4 @@
-![image](http://www.ark-energy.eu/wp-content/uploads/ark-dark.png)
+![image](./ark-dark.png)
 # MessagePack.NodaTime
 
 This library adds support for NodaTime types to MessagePack C#.
