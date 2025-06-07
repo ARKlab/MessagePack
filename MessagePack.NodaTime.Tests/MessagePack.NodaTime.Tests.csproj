@@ -12,7 +12,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="MSTest.TestAdapter">
       <Version>3.9.1</Version>
     </PackageReference>
@@ -23,7 +23,7 @@
       <Version>2.9.3</Version>
     </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio">
-      <Version>3.1.0</Version>
+      <Version>3.1.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
