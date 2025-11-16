@@ -29,6 +29,9 @@ jobs:
     - name: 'Install dotnet'
       uses: actions/setup-dotnet@v5
       with:
+        dotnet-version: | 
+            8.x
+            10.x
         global-json-file: global.json
       
     - name: 'Restore packages'
@@ -38,7 +41,7 @@ jobs:
       run: dotnet build --no-restore --configuration Release
 
     - name: Test
-      run: dotnet test --logger "trx;LogFileName=test-results.trx" --no-restore || true
+      run: dotnet test --logger "trx;LogFileName=test-results.trx" --no-restore
 
     - name: Test Report
       uses: dorny/test-reporter@v1
