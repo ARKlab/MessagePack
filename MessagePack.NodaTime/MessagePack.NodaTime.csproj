@@ -20,7 +20,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="MessagePack" Version="3.1.4" />
-		<PackageReference Include="NodaTime" Version="3.3.0" />
+		<PackageReference Include="NodaTime" Version="3.3.1" />
 	</ItemGroup>
 
 </Project>
