@@ -43,14 +43,12 @@ jobs:
     - name: Test
       run: dotnet test --logger "trx;LogFileName=test-results.trx" --no-restore
 
-    - name: Test Report
-      uses: dorny/test-reporter@v3
-      if: always()
+    # see https://github.com/dorny/test-reporter?tab=readme-ov-file#recommended-setup-for-public-repositories
+    - uses: actions/upload-artifact@v7  # upload test results
+      if: success() || failure()        # run this step even if previous step failed
       with:
-        name: DotNET Tests
-        path: "**/test-results.trx"                            
-        reporter: dotnet-trx
-        fail-on-error: true        
+        name: test-results
+        path: "**/*.trx"
 
   deploy:
     name: 'Nuget Push'
