@@ -21,7 +21,8 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 
 		<PackageProjectUrl>https://github.com/ARKlab/MessagePack</PackageProjectUrl>
-		<PackageLicense>MIT</PackageLicense>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 
 		<PackageIcon>ark-dark.png</PackageIcon>
 		<RepositoryUrl>https://github.com/ARKlab/MessagePack</RepositoryUrl>
@@ -56,8 +57,8 @@
 		</PackageReference>
 
 		<None Include="..\ark-dark.png" Pack="true" PackagePath="\"/>
+		<None Include="..\README.md" Pack="true" PackagePath="\"/>
 
-		
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1' Or '$(TargetFramework)' == 'netstandard2.0'">
