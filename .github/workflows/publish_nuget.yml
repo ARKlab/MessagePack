@@ -57,6 +57,21 @@ jobs:
         path: TestResults/*.trx
         if-no-files-found: error
 
+    - name: Make coverage source paths repository-relative
+      if: ${{ !cancelled() && steps.test-net10.outcome != 'skipped' }}
+      shell: pwsh
+      run: |
+        Get-ChildItem TestResults/*.cobertura.xml | ForEach-Object {
+          [xml]$report = Get-Content -Raw $_.FullName
+          foreach ($class in $report.SelectNodes('//class')) {
+            $class.filename = [IO.Path]::GetRelativePath($env:GITHUB_WORKSPACE, $class.filename).Replace('\', '/')
+            if ($class.filename.StartsWith('../') -or !(Test-Path -LiteralPath $class.filename -PathType Leaf)) {
+              throw "Coverage source is not a repository file: $($class.filename)"
+            }
+          }
+          $report.Save($_.FullName)
+        }
+
     - name: Upload coverage artifact
       uses: actions/upload-artifact@v7
       if: ${{ !cancelled() && steps.test-net10.outcome != 'skipped' }}
