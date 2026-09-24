@@ -1,25 +1,81 @@
 ﻿// Copyright (c) ARK LTD. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for
 // license information. 
+using MessagePack.Formatters;
 using MessagePack.NodaTime.Tests.Helpers;
+using MessagePack.Resolvers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Buffers;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class PeriodMessagePackFormatterTest
     {
-        [Fact]
-        public void PeriodTest()
+        [Test]
+        [Arguments(false)]
+        [Arguments(true)]
+        public async Task NullFollowedByPeriodRoundTrips(bool useIsoString)
         {
-            Period p = Period.FromDays(1);
-            Assert.Equal(TestTools.Convert(p), p);
+            IMessagePackFormatter<Period?> formatter = useIsoString
+                ? PeriodAsIsoStringMessagePackFormatter.Instance
+                : PeriodAsIntArrayMessagePackFormatter.Instance;
+            var options = MessagePackSerializerOptions.Standard.WithResolver(CompositeResolver.Create(
+                new IMessagePackFormatter[] { formatter },
+                new IFormatterResolver[] { StandardResolver.Instance }));
+            Period?[] periods = { null, Period.FromDays(1) };
+
+            var bytes = MessagePackSerializer.Serialize(periods, options);
+            var actual = MessagePackSerializer.Deserialize<Period?[]>(bytes, options);
+
+            await Assert.That(actual).IsEquivalentTo(periods, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void PeriodArrayTest()
+        [Test]
+        [Arguments(false)]
+        [Arguments(true)]
+        public async Task DeserializeAdvancesPastNullAndPeriod(bool useIsoString)
+        {
+            IMessagePackFormatter<Period?> formatter = useIsoString
+                ? PeriodAsIsoStringMessagePackFormatter.Instance
+                : PeriodAsIntArrayMessagePackFormatter.Instance;
+            var options = MessagePackSerializerOptions.Standard.WithResolver(CompositeResolver.Create(
+                new IMessagePackFormatter[] { formatter },
+                new IFormatterResolver[] { StandardResolver.Instance }));
+            var period = Period.FromDays(1);
+            var buffer = new ArrayBufferWriter<byte>();
+            var writer = new MessagePackWriter(buffer);
+            writer.WriteNil();
+            formatter.Serialize(ref writer, period, options);
+            writer.Flush();
+
+            var reader = new MessagePackReader(buffer.WrittenMemory);
+            var nullResult = formatter.Deserialize(ref reader, options);
+            var consumedAfterNull = reader.Consumed;
+            var nextType = reader.NextMessagePackType;
+            var periodResult = formatter.Deserialize(ref reader, options);
+            var consumedAfterPeriod = reader.Consumed;
+            var atEnd = reader.End;
+
+            await Assert.That(nullResult).IsNull();
+            await Assert.That(consumedAfterNull).IsEqualTo(1L);
+            await Assert.That(nextType).IsEqualTo(useIsoString ? MessagePackType.String : MessagePackType.Array);
+            await Assert.That(periodResult).IsEqualTo(period);
+            await Assert.That(consumedAfterPeriod).IsEqualTo((long)buffer.WrittenCount);
+            await Assert.That(atEnd).IsTrue();
+        }
+
+        [Test]
+        public async Task PeriodTest()
+        {
+            Period p = Period.FromDays(1);
+            await Assert.That(TestTools.Convert(p)).IsEqualTo(p);
+        }
+
+        [Test]
+        public async Task PeriodArrayTest()
         {
             var pp = new PeriodBuilder
             {
@@ -50,7 +106,7 @@ namespace MessagePack.NodaTime.Tests
                 Period.FromNanoseconds(5),
                 pp1
             };
-            Assert.Equal(TestTools.Convert(p), p);
+            await Assert.That(TestTools.Convert(p)).IsEquivalentTo(p, CollectionOrdering.Matching);
         }
     }
 }

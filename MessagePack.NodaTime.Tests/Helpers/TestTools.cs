@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for
 // license information. 
 using System;
-using Xunit;
+using System.Threading.Tasks;
 
 namespace MessagePack.NodaTime.Tests.Helpers
 {
@@ -13,8 +13,9 @@ namespace MessagePack.NodaTime.Tests.Helpers
             return MessagePackSerializer.Deserialize<T>(MessagePackSerializer.Serialize(value));
         }
 
-        public static void ThrowsInner<T>(Func<object> testCode) where T : Exception
+        public static async Task ThrowsInner<T>(Func<object> testCode) where T : Exception
         {
+            bool found = false;
             try
             {
                 testCode.Invoke();
@@ -27,14 +28,15 @@ namespace MessagePack.NodaTime.Tests.Helpers
                 {
                     if (currex is T)
                     {
-                        return;
+                        found = true;
+                        break;
                     }
 
                     currex = currex.InnerException;
                 }
             }
 
-            Assert.Fail($"Extention of type {typeof(T).Name} is not throwed");
+            await Assert.That(found).IsTrue().Because($"Exception of type {typeof(T).Name} must be thrown");
 
         }
     }

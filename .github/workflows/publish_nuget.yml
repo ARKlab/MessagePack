@@ -15,8 +15,6 @@ env:
 
 permissions:
   contents: read
-  statuses: write
-  checks: write
   
 jobs:
   build:
@@ -25,6 +23,9 @@ jobs:
     steps:
     - name: 'Checkout'
       uses: actions/checkout@v7
+      with:
+        ref: ${{ github.event.pull_request.head.sha || github.sha }}
+        persist-credentials: false
 
     - name: 'Install dotnet'
       uses: actions/setup-dotnet@v6
@@ -40,15 +41,94 @@ jobs:
     - name: 'Build project'
       run: dotnet build --no-restore --configuration Release
 
-    - name: Test
-      run: dotnet test --no-restore --report-trx --results-directory TestResults
+    - name: Test .NET 10 with coverage
+      id: test-net10
+      run: dotnet test --configuration Release --no-build --framework net10.0 --report-trx --coverage --coverage-settings coverage.settings.xml --coverage-output-format cobertura --coverage-output net10.0.cobertura.xml --results-directory TestResults
 
-    # see https://github.com/dorny/test-reporter?tab=readme-ov-file#recommended-setup-for-public-repositories
-    - uses: actions/upload-artifact@v7  # upload test results
-      if: success() || failure()        # run this step even if previous step failed
+    - name: Test .NET 8 with coverage
+      if: ${{ !cancelled() && steps.test-net10.outcome != 'skipped' }}
+      run: dotnet test --configuration Release --no-build --framework net8.0 --report-trx --coverage --coverage-settings coverage.settings.xml --coverage-output-format cobertura --coverage-output net8.0.cobertura.xml --results-directory TestResults
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v7
+      if: ${{ !cancelled() && steps.test-net10.outcome != 'skipped' }}
       with:
         name: test-results
-        path: "**/*.trx"
+        path: TestResults/*.trx
+        if-no-files-found: error
+
+    - name: Make coverage source paths repository-relative
+      if: ${{ !cancelled() && steps.test-net10.outcome != 'skipped' }}
+      shell: pwsh
+      run: |
+        Get-ChildItem TestResults/*.cobertura.xml | ForEach-Object {
+          [xml]$report = Get-Content -Raw $_.FullName
+          foreach ($class in $report.SelectNodes('//class')) {
+            $class.filename = [IO.Path]::GetRelativePath($env:GITHUB_WORKSPACE, $class.filename).Replace('\', '/')
+            if ($class.filename.StartsWith('../') -or !(Test-Path -LiteralPath $class.filename -PathType Leaf)) {
+              throw "Coverage source is not a repository file: $($class.filename)"
+            }
+          }
+          $report.Save($_.FullName)
+        }
+
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@v7
+      if: ${{ !cancelled() && steps.test-net10.outcome != 'skipped' }}
+      with:
+        name: code-coverage
+        path: TestResults/*.cobertura.xml
+        if-no-files-found: error
+
+  report:
+    name: DotNET Tests
+    needs: build
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v8
+      with:
+        name: test-results
+        path: TestResults
+
+    - uses: dorny/test-reporter@v3
+      with:
+        name: DotNET Tests
+        path: TestResults/*.trx
+        reporter: dotnet-trx
+        use-actions-summary: 'true'
+        max-annotations: '0'
+        fail-on-error: 'true'
+        fail-on-empty: 'true'
+
+    - name: Require successful build and test execution
+      if: ${{ !cancelled() && needs.build.result != 'success' }}
+      run: exit 1
+
+  coverage:
+    name: Code coverage (${{ matrix.framework }})
+    needs: build
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository || github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      code-quality: write
+      pull-requests: read
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [net10.0, net8.0]
+    steps:
+    - uses: actions/download-artifact@v8
+      with:
+        name: code-coverage
+        path: coverage
+
+    - uses: actions/upload-code-coverage@v1
+      with:
+        file: coverage/${{ matrix.framework }}.cobertura.xml
+        language: C#
+        label: code-coverage/${{ matrix.framework }}
 
   deploy:
     name: 'Nuget Push'

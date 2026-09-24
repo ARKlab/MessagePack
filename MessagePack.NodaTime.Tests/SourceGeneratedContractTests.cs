@@ -8,7 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
+using System.Threading.Tasks;
 
 namespace MessagePack.NodaTime.Tests
 {
@@ -37,17 +37,16 @@ namespace MessagePack.NodaTime.Tests
         public ZonedDateTime ZonedDateTime { get; set; } = ZonedDateTime.FromDateTimeOffset(DateTimeOffset.Now);
     }
 
-    [Collection("ResolverCollection")]
     public class SourceGeneratedContractTests
     {
-        [Fact]
-        public void Roundtrip()
+        [Test]
+        public async Task Roundtrip()
         {
             var o = new MyClass { LocalDateTime = LocalDateTime.FromDateTime(DateTime.Now) };
             var bin = MessagePackSerializer.Serialize(o);
             var res = MessagePackSerializer.Deserialize<MyClass>(bin);
 
-            Assert.Equal(o, res); 
+            await Assert.That(res).IsEqualTo(o);
         }
     }
 }

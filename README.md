@@ -13,7 +13,7 @@ This library adds support for NodaTime types to MessagePack C#.
 
 This library is provided in NuGet.
 
-Support for .NET Framework 4.5, .NET Framework 4.6.1, .NET Standard 1.6 and .NET Standard 2.0.
+Targets .NET 10, .NET 8, .NET Standard 2.1 and .NET Standard 2.0.
 
 In the Package Manager Console -
 ```
@@ -127,7 +127,29 @@ In the base [MessagePack](https://github.com/neuecc/MessagePack-CSharp) library,
 As explained previously, we use the timestamp format for some of our serialized NodaTime types. The timestamp format is interoperable with [MessagePack for C#](https://github.com/neuecc/MessagePack-CSharp), the official [MsgPack library](https://github.com/msgpack/msgpack/blob/master/spec.md) and any other MessagePack implementations that support the extension type of -1.
 
 ## Contributing
-*TBC*
+Use the .NET SDK selected by `global.json` (C# 14) and open `MessagePack.slnx`.
+The .NET 8 runtime is also required to run all tests.
+
+```sh
+dotnet build MessagePack.slnx --configuration Release
+dotnet test --configuration Release --no-build --report-trx --results-directory TestResults
+```
+
+Tests use TUnit on Microsoft.Testing.Platform v2, not VSTest. Existing serialization
+formats and target frameworks are preserved.
+
+To collect Cobertura coverage with the existing MTP coverage extension:
+
+```sh
+dotnet test --configuration Release --no-build --report-trx --coverage --coverage-settings coverage.settings.xml --coverage-output-format cobertura --results-directory TestResults
+```
+
+Coverage includes the library, excluding generated code and test dependencies.
+CI publishes the `DotNET Tests` check and test summary in the build workflow,
+and saves TRX and Cobertura files as `test-results` and `code-coverage` artifacts.
+Coverage for each test framework is uploaded to GitHub code coverage for same-repository
+pull requests and `master`; fork pull requests still run tests and retain artifacts.
+GitHub Code Quality/code coverage must be enabled for the repository.
 
 ## Links
 * [Nuget](https://www.nuget.org/packages/MessagePack.NodaTime/)

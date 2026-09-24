@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
+using System.Threading.Tasks;
 
 namespace MessagePack.NodaTime.Tests
 {
@@ -16,11 +16,10 @@ namespace MessagePack.NodaTime.Tests
         public LocalDateTime ldt { get; set; }
     }
 
-    [Collection("ResolverCollection")]
     public class ContractlessTests
     {
-        [Fact]
-        public void AnonType()
+        [Test]
+        public async Task AnonType()
         {
             var o = new { Ldt = LocalDateTime.FromDateTime(DateTime.Now) };
             var bin = MessagePackSerializer.Serialize(o);
@@ -28,76 +27,78 @@ namespace MessagePack.NodaTime.Tests
 
             var abc = ((IEnumerable)res).Cast<KeyValuePair<object, object>>().First().Value;
 
-            Assert.Equal(o.Ldt.ToDateTimeUnspecified(), abc); // in DateTime format due to 'abc' being DateTime object
+            await Assert.That(abc).IsEqualTo(o.Ldt.ToDateTimeUnspecified()); // in DateTime format due to 'abc' being DateTime object
         }
 
-        [Fact]
-        public void AnonTypeWithClassProperty()
+        [Test]
+        public async Task AnonTypeWithClassProperty()
         {
             var o = new { ldt = LocalDateTime.FromDateTime(DateTime.Now) };
             var bin = MessagePackSerializer.Serialize(o);
             var res = MessagePackSerializer.Deserialize<LDT>(bin);
 
-            Assert.Equal(o.ldt, res.ldt);
+            await Assert.That(res.ldt).IsEqualTo(o.ldt);
         }
 
-        [Fact(Skip = "object cannot be serialized due to DateTime part of Nodatime type")]
-        public void ObjectToDynamic()
+        [Test]
+        [Skip("object cannot be serialized due to DateTime part of Nodatime type")]
+        public async Task ObjectToDynamic()
         {
             object o = new ZonedDateTime();
             var bin = MessagePackSerializer.Serialize(o);
             var res = MessagePackSerializer.Deserialize<dynamic>(bin);
 
-            Assert.Equal(o, res);
+            await Assert.That((object)res).IsEqualTo(o);
         }
 
-        [Fact]
-        public void ObjectToLDT()
+        [Test]
+        public async Task ObjectToLDT()
         {
             object o = new LocalDateTime();
             var bin = MessagePackSerializer.Serialize(o);
             var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
 
-            Assert.Equal(o, res);
+            await Assert.That((object)res).IsEqualTo(o);
         }
 
-        [Fact]
-        public void ObjectToInstant()
+        [Test]
+        public async Task ObjectToInstant()
         {
             object o = new Instant();
             var bin = MessagePackSerializer.Serialize(o);
             var res = MessagePackSerializer.Deserialize<Instant>(bin);
 
-            Assert.Equal(o, res);
+            await Assert.That((object)res).IsEqualTo(o);
         }
 
-        [Fact]
-        public void DynamicToLDT()
+        [Test]
+        public async Task DynamicToLDT()
         {
             dynamic d = new LocalDate();
             var bin = MessagePackSerializer.Serialize(d);
             var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
-            Assert.Equal(d, res);
+            await Assert.That((object)res).IsEqualTo((object)d);
         }
 
-        [Fact(Skip = "cannot be deserialized as dynamic")]
-        public void ZonedDTToDynamic()
+        [Test]
+        [Skip("cannot be deserialized as dynamic")]
+        public async Task ZonedDTToDynamic()
         {
             var d = new ZonedDateTime();
             var bin = MessagePackSerializer.Serialize(d);
             var res = MessagePackSerializer.Deserialize<dynamic>(bin);
 
-            Assert.Equal(d, res);
+            await Assert.That((object)res).IsEqualTo(d);
         }
 
-        [Fact]
-        public void ObjectWithNonGeneric()
+        [Test]
+        public async Task ObjectWithNonGeneric()
         {
             object o = new LocalDateTime();
             var bin = MessagePackSerializer.Serialize(o.GetType(), o);
             var res = MessagePackSerializer.Deserialize(o.GetType(), bin);
 
-            Assert.Equal(o, res);
+            await Assert.That(res).IsEqualTo(o);
         }
     }
 }

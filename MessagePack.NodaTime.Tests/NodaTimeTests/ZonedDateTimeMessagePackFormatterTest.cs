@@ -4,30 +4,30 @@
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class ZonedDateTimeMessagePackFormatterTest
     {
-        [Fact]
-        public void ZonedDateTimeTest()
+        [Test]
+        public async Task ZonedDateTimeTest()
         {
             Instant inst = Instant.FromDateTimeUtc(DateTime.UtcNow);
             ZonedDateTime zoned = new ZonedDateTime(inst, DateTimeZone.Utc);
-            Assert.Equal(TestTools.Convert(zoned), zoned);
+            await Assert.That(TestTools.Convert(zoned)).IsEqualTo(zoned);
         }
 
-        [Fact]
-        public void NullableZonedDateTimeTest()
+        [Test]
+        public async Task NullableZonedDateTimeTest()
         {
             ZonedDateTime? zoned = null;
-            Assert.Equal(TestTools.Convert(zoned), zoned);
+            await Assert.That(TestTools.Convert(zoned)).IsEqualTo(zoned);
         }
 
-        [Fact]
-        public void ZonedDateTimeArrayTest()
+        [Test]
+        public async Task ZonedDateTimeArrayTest()
         {
             Instant inst = Instant.FromDateTimeUtc(DateTime.UtcNow);
             LocalDateTime ldt = LocalDateTime.FromDateTime(DateTime.Now);
@@ -38,11 +38,11 @@ namespace MessagePack.NodaTime.Tests
                 new ZonedDateTime(inst, DateTimeZone.Utc),
                 new ZonedDateTime(inst, DateTimeZone.Utc)
             };
-            Assert.Equal(TestTools.Convert(zoned), zoned);
+            await Assert.That(TestTools.Convert(zoned)).IsEquivalentTo(zoned, CollectionOrdering.Matching);
         }        
         
-        [Fact]
-        public void NullableZonedDateTimeArrayTest()
+        [Test]
+        public async Task NullableZonedDateTimeArrayTest()
         {
             ZonedDateTime?[] zoned = new ZonedDateTime?[] {
                 null,
@@ -51,7 +51,7 @@ namespace MessagePack.NodaTime.Tests
                 null,
                 null
             };
-            Assert.Equal(TestTools.Convert(zoned), zoned);
+            await Assert.That(TestTools.Convert(zoned)).IsEquivalentTo(zoned, CollectionOrdering.Matching);
         }
     }
 }

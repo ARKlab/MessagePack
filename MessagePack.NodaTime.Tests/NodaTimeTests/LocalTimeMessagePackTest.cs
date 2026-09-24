@@ -3,29 +3,29 @@
 // license information. 
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class LocalTimeMessagePackFormatterTest
     {
-        [Fact]
-        public void LocalTimeTest()
+        [Test]
+        public async Task LocalTimeTest()
         {
             LocalTime t = LocalTime.FromSecondsSinceMidnight(1);
-            Assert.Equal(TestTools.Convert(t), t);
+            await Assert.That(TestTools.Convert(t)).IsEqualTo(t);
         }
 
-        [Fact]
-        public void NullableLocalTimeTest()
+        [Test]
+        public async Task NullableLocalTimeTest()
         {
             LocalTime? t = null;
-            Assert.Equal(TestTools.Convert(t), t);
+            await Assert.That(TestTools.Convert(t)).IsEqualTo(t);
         }        
 
-        [Fact]
-        public void LocalTimeArrayTest()
+        [Test]
+        public async Task LocalTimeArrayTest()
         {
             LocalTime[] lt =
                 { LocalTime.FromTicksSinceMidnight(4000),
@@ -34,11 +34,11 @@ namespace MessagePack.NodaTime.Tests
                 new LocalTime(),
                 LocalTime.FromSecondsSinceMidnight(1)
             };
-            Assert.Equal(TestTools.Convert(lt), lt);
+            await Assert.That(TestTools.Convert(lt)).IsEquivalentTo(lt, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void NullableLocalTimeArrayTest()
+        [Test]
+        public async Task NullableLocalTimeArrayTest()
         {
             LocalTime?[] lt = new LocalTime?[] {
                 null,
@@ -47,7 +47,7 @@ namespace MessagePack.NodaTime.Tests
                 null,
                 null
             };
-            Assert.Equal(TestTools.Convert(lt), lt);
+            await Assert.That(TestTools.Convert(lt)).IsEquivalentTo(lt, CollectionOrdering.Matching);
         }        
     }
 }

@@ -4,29 +4,29 @@
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class LocalDateMessagePackFormatterTest
     {   
-        [Fact]
-        public void LocalDateTest()
+        [Test]
+        public async Task LocalDateTest()
         {
             LocalDate ld = LocalDate.FromDateTime(DateTime.Now);      
-            Assert.Equal(TestTools.Convert(ld), ld);
+            await Assert.That(TestTools.Convert(ld)).IsEqualTo(ld);
         }
 
-        [Fact]
-        public void NullableLocalDateTest()
+        [Test]
+        public async Task NullableLocalDateTest()
         {
             LocalDate? ld = null;
-            Assert.Equal(TestTools.Convert(ld), ld);
+            await Assert.That(TestTools.Convert(ld)).IsEqualTo(ld);
         }
                 
-        [Fact]
-        public void LocalDateArrayTest()
+        [Test]
+        public async Task LocalDateArrayTest()
         {
             LocalDate[] ld =
                 { LocalDate.FromDateTime(DateTime.Now),
@@ -35,11 +35,11 @@ namespace MessagePack.NodaTime.Tests
                 LocalDate.FromDateTime(DateTime.Now.AddMonths(10)),
                 LocalDate.FromDateTime(new DateTime(2010,10,10))
             };
-            Assert.Equal(TestTools.Convert(ld), ld);
+            await Assert.That(TestTools.Convert(ld)).IsEquivalentTo(ld, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void NullableLocalDateArrayTest()
+        [Test]
+        public async Task NullableLocalDateArrayTest()
         {
             LocalDate?[] ld = new LocalDate?[] {
                 null,
@@ -48,7 +48,7 @@ namespace MessagePack.NodaTime.Tests
                 null,
                 null
             };
-            Assert.Equal(TestTools.Convert(ld), ld);
+            await Assert.That(TestTools.Convert(ld)).IsEquivalentTo(ld, CollectionOrdering.Matching);
         }        
     }
 }
