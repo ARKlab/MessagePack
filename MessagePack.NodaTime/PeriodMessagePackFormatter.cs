@@ -17,7 +17,7 @@ namespace MessagePack.NodaTime
 
         public Period? Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            if (reader.IsNil)
+            if (reader.TryReadNil())
             {
                 return null;
             }
@@ -49,7 +49,7 @@ namespace MessagePack.NodaTime
 
         public Period? Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            if (reader.IsNil)
+            if (reader.TryReadNil())
             {
                 return null;
             }
