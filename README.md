@@ -138,6 +138,19 @@ dotnet test --configuration Release --no-build --report-trx --results-directory 
 Tests use TUnit on Microsoft.Testing.Platform v2, not VSTest. Existing serialization
 formats and target frameworks are preserved.
 
+To collect Cobertura coverage with the existing MTP coverage extension:
+
+```sh
+dotnet test --configuration Release --no-build --report-trx --coverage --coverage-settings coverage.settings.xml --coverage-output-format cobertura --results-directory TestResults
+```
+
+Coverage includes the library, excluding generated code and test dependencies.
+CI publishes the `DotNET Tests` check and test summary in the build workflow,
+and saves TRX and Cobertura files as `test-results` and `code-coverage` artifacts.
+Coverage for each test framework is uploaded to GitHub code coverage for same-repository
+pull requests and `master`; fork pull requests still run tests and retain artifacts.
+GitHub Code Quality/code coverage must be enabled for the repository.
+
 ## Links
 * [Nuget](https://www.nuget.org/packages/MessagePack.NodaTime/)
 * [Github](https://github.com/ARKlab/MessagePack)
