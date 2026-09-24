@@ -4,29 +4,29 @@
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class DurationMessagePackFormatterTest
     {
-        [Fact]
-        public void DurationTest()
+        [Test]
+        public async Task DurationTest()
         {
             var d = Duration.FromDays(1);
-            Assert.Equal(TestTools.Convert(d), d);
+            await Assert.That(TestTools.Convert(d)).IsEqualTo(d);
         }
 
-        [Fact]
-        public void DurationArrayTest()
+        [Test]
+        public async Task DurationArrayTest()
         {
             var p = new Duration[]
             { 
                 Duration.FromDays(1),
                 Duration.FromNanoseconds(100),
             };
-            Assert.Equal(TestTools.Convert(p), p);
+            await Assert.That(TestTools.Convert(p)).IsEquivalentTo(p, CollectionOrdering.Matching);
         }
     }
 }

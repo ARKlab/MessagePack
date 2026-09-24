@@ -4,29 +4,29 @@
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class InstantMessagePackFormatterTest
     {
-        [Fact]
-        public void InstantValueTest()
+        [Test]
+        public async Task InstantValueTest()
         {
             Instant inst = Instant.FromDateTimeUtc(DateTime.UtcNow);
-            Assert.Equal(TestTools.Convert(inst), inst);
+            await Assert.That(TestTools.Convert(inst)).IsEqualTo(inst);
         }
 
-        [Fact]
-        public void NullableInstantValueTest()
+        [Test]
+        public async Task NullableInstantValueTest()
         {
             Instant? inst = null;
-            Assert.Equal(TestTools.Convert(inst), inst);
+            await Assert.That(TestTools.Convert(inst)).IsEqualTo(inst);
         }                
 
-        [Fact]
-        public void InstantArrayTest()
+        [Test]
+        public async Task InstantArrayTest()
         {
             Instant[] inst =
                 { Instant.FromDateTimeUtc(DateTime.UtcNow.AddHours(13)),
@@ -35,11 +35,11 @@ namespace MessagePack.NodaTime.Tests
                 Instant.FromDateTimeUtc(DateTime.UtcNow.AddSeconds(33)),
                 Instant.FromDateTimeUtc(DateTime.UtcNow),
             };
-            Assert.Equal(TestTools.Convert(inst), inst);
+            await Assert.That(TestTools.Convert(inst)).IsEquivalentTo(inst, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void NullableInstantArrayTest()
+        [Test]
+        public async Task NullableInstantArrayTest()
         {
             Instant?[] inst = new Instant?[] {
                 null,
@@ -48,7 +48,7 @@ namespace MessagePack.NodaTime.Tests
                 null,
                 null
             };
-            Assert.Equal(TestTools.Convert(inst), inst);
+            await Assert.That(TestTools.Convert(inst)).IsEquivalentTo(inst, CollectionOrdering.Matching);
         }       
     }
 }

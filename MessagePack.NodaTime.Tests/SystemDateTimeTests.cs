@@ -6,15 +6,14 @@ using NodaTime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Xunit;
+using System.Threading.Tasks;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class SystemDateTimeTests
     {
-        [Fact]
-        public void LocalDateTimeToDateTime()
+        [Test]
+        public async Task LocalDateTimeToDateTime()
         {
             DateTime dt = new DateTime(2000, 1, 1, 1, 22, 33);
             LocalDateTime ldt = LocalDateTime.FromDateTime(dt);
@@ -22,11 +21,11 @@ namespace MessagePack.NodaTime.Tests
             var localDateTimeBinary = MessagePackSerializer.Serialize(ldt);
             var resultDateTime = MessagePackSerializer.Deserialize<DateTime>(localDateTimeBinary);
 
-            Assert.Equal(dt, resultDateTime);
+            await Assert.That(resultDateTime).IsEqualTo(dt);
         }
 
-        [Fact]
-        public void DateTimeToLocalDateTime()
+        [Test]
+        public async Task DateTimeToLocalDateTime()
         {
             var ldt = new LocalDateTime(2018, 5, 15, 0, 0);
             var dt = DateTime.SpecifyKind(ldt.ToDateTimeUnspecified(), DateTimeKind.Utc);
@@ -34,42 +33,43 @@ namespace MessagePack.NodaTime.Tests
             var bin = MessagePackSerializer.Serialize(dt);
             var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
 
-            Assert.Equal(ldt, res);
+            await Assert.That(res).IsEqualTo(ldt);
         }
 
-        [Fact]
-        public void LocalDateTimeToLocalDate()
+        [Test]
+        public async Task LocalDateTimeToLocalDate()
         {
             LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0);
 
             var bin = MessagePackSerializer.Serialize(ldt);
             var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
 
-            Assert.Equal(ldt.Date, res);
+            await Assert.That(res).IsEqualTo(ldt.Date);
         }
 
-        [Fact]
-        public void LocalDateTimeToLocalDateFailing()
+        [Test]
+        public async Task LocalDateTimeToLocalDateFailing()
         {
             LocalDateTime ldt = new LocalDateTime(2016, 08, 21, 0, 0, 0, 0).PlusNanoseconds(100);
 
             var bin = MessagePackSerializer.Serialize(ldt);
-            Assert.Throws<MessagePack.MessagePackSerializationException>(() => MessagePackSerializer.Deserialize<LocalDate>(bin));
+            await Assert.That(() => MessagePackSerializer.Deserialize<LocalDate>(bin))
+                .ThrowsExactly<MessagePack.MessagePackSerializationException>();
         }
 
-        [Fact]
-        public void DateTimeToLocalDate()
+        [Test]
+        public async Task DateTimeToLocalDate()
         {
             DateTime dt = new DateTime(1986, 12, 11, 0, 0, 0);
 
             var bin = MessagePackSerializer.Serialize(dt);
             var res = MessagePackSerializer.Deserialize<LocalDate>(bin);
 
-            Assert.Equal(dt.Date, res.ToDateTimeUnspecified());
+            await Assert.That(res.ToDateTimeUnspecified()).IsEqualTo(dt.Date);
         }
 
-        [Fact]
-        public void LocalDateToLocalDateTime()
+        [Test]
+        public async Task LocalDateToLocalDateTime()
         {
             LocalDate ld = new LocalDate(2000, 1, 1);
 
@@ -78,29 +78,30 @@ namespace MessagePack.NodaTime.Tests
             var bin = MessagePackSerializer.Serialize(ld);
             var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
 
-            Assert.Equal(ldt, res);
+            await Assert.That(res).IsEqualTo(ldt);
         }
 
-        [Fact]
-        public void DateTimeToLocalDateWithPrecisionLoss()
+        [Test]
+        public async Task DateTimeToLocalDateWithPrecisionLoss()
         {
             DateTime dt = new DateTime(2000, 1, 1, 0, 0, 1);
 
-            TestTools.ThrowsInner<InvalidOperationException>(() => 
+            await TestTools.ThrowsInner<InvalidOperationException>(() =>
             (MessagePackSerializer.Deserialize<LocalDate>(MessagePackSerializer.Serialize(dt))));
         }
 
-        [Fact]
-        public void LocalDateTimeToLocalDateWithPrecisionLoss()
+        [Test]
+        public async Task LocalDateTimeToLocalDateWithPrecisionLoss()
         {
             LocalDateTime ldt = new LocalDateTime(2000, 1, 1, 0, 0, 0, 1);
 
-            TestTools.ThrowsInner<InvalidOperationException>(() =>
+            await TestTools.ThrowsInner<InvalidOperationException>(() =>
             (MessagePackSerializer.Deserialize<LocalDate>(MessagePackSerializer.Serialize(ldt))));            
         }
 
-        [Fact(Skip = "Fails due to Time being converted to UTC, goes back an hour")]
-        public void DateTimeToLocalDateTime1()
+        [Test]
+        [Skip("Fails due to Time being converted to UTC, goes back an hour")]
+        public async Task DateTimeToLocalDateTime1()
         {            
             var ldt = new LocalDateTime(2018, 5, 15, 0, 0, 0);
             var dt = new DateTime(2018, 5, 15, 0, 0, 0);
@@ -108,7 +109,7 @@ namespace MessagePack.NodaTime.Tests
             var bin = MessagePackSerializer.Serialize(dt);
             var res = MessagePackSerializer.Deserialize<LocalDateTime>(bin);
 
-            Assert.Equal(ldt, res);
+            await Assert.That(res).IsEqualTo(ldt);
         }
     }
 }

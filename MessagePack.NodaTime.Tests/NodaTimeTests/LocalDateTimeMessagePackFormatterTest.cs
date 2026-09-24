@@ -4,29 +4,29 @@
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class LocalDateTimeAsDateTimeMessagePackFormatterTest
     {
-        [Fact]
-        public void LocalDateTimeAsDateTimeTest()
+        [Test]
+        public async Task LocalDateTimeAsDateTimeTest()
         {
             LocalDateTime ldt = LocalDateTime.FromDateTime(DateTime.Now);
-            Assert.Equal(TestTools.Convert(ldt), ldt);
+            await Assert.That(TestTools.Convert(ldt)).IsEqualTo(ldt);
         }
 
-        [Fact]
-        public void NullableLocalDateTimeAsDateTimeTest()
+        [Test]
+        public async Task NullableLocalDateTimeAsDateTimeTest()
         {
             LocalDateTime? ldt = null;
-            Assert.Equal(TestTools.Convert(ldt), ldt);
+            await Assert.That(TestTools.Convert(ldt)).IsEqualTo(ldt);
         }
 
-        [Fact]
-        public void LocalDateTimeArrayTest()
+        [Test]
+        public async Task LocalDateTimeArrayTest()
         {
             LocalDateTime[] ldt =
                 { LocalDateTime.FromDateTime(DateTime.Now.AddDays(3)),
@@ -35,11 +35,11 @@ namespace MessagePack.NodaTime.Tests
                 LocalDateTime.FromDateTime(DateTime.Now),
                 LocalDateTime.FromDateTime(new DateTime(2010,10,10))
             };
-            Assert.Equal(TestTools.Convert(ldt), ldt);
+            await Assert.That(TestTools.Convert(ldt)).IsEquivalentTo(ldt, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void NullableLocalDateTimeArrayTest()
+        [Test]
+        public async Task NullableLocalDateTimeArrayTest()
         {
             LocalDateTime?[] ldt = new LocalDateTime?[] {
                 null,
@@ -48,28 +48,28 @@ namespace MessagePack.NodaTime.Tests
                 null,
                 null
             };
-            Assert.Equal(TestTools.Convert(ldt), ldt);
+            await Assert.That(TestTools.Convert(ldt)).IsEquivalentTo(ldt, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void LocalDateTimeToLocalDateWithTimeLoss()
+        [Test]
+        public async Task LocalDateTimeToLocalDateWithTimeLoss()
         {
             LocalDateTime ldt = new LocalDateTime(2018, 5, 15, 1, 0, 0).PlusTicks(1);
             var bin = MessagePackSerializer.Serialize(ldt);
 
-            TestTools.ThrowsInner<InvalidOperationException>(() => 
+            await TestTools.ThrowsInner<InvalidOperationException>(() =>
             (MessagePackSerializer.Deserialize<LocalDate>(bin)));
         }
 
-        [Fact]
-        public void LocalDateTimeToLocalDateTimeWithNanosecondsLoss()
+        [Test]
+        public async Task LocalDateTimeToLocalDateTimeWithNanosecondsLoss()
         {
             //nanosecond accuracy lost in datetime conversion --> ReadMe
             LocalDateTime ldt = new LocalDateTime(2018, 5, 15, 0, 0, 0).PlusNanoseconds(1);
             var bin = MessagePackSerializer.Serialize(ldt);
             var res = TestTools.Convert(ldt);
 
-            Assert.NotEqual(ldt, res);
+            await Assert.That(res).IsNotEqualTo(ldt);
         }
     }
 }

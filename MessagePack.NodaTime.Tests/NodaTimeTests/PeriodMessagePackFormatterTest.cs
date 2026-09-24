@@ -4,22 +4,22 @@
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class PeriodMessagePackFormatterTest
     {
-        [Fact]
-        public void PeriodTest()
+        [Test]
+        public async Task PeriodTest()
         {
             Period p = Period.FromDays(1);
-            Assert.Equal(TestTools.Convert(p), p);
+            await Assert.That(TestTools.Convert(p)).IsEqualTo(p);
         }
 
-        [Fact]
-        public void PeriodArrayTest()
+        [Test]
+        public async Task PeriodArrayTest()
         {
             var pp = new PeriodBuilder
             {
@@ -50,7 +50,7 @@ namespace MessagePack.NodaTime.Tests
                 Period.FromNanoseconds(5),
                 pp1
             };
-            Assert.Equal(TestTools.Convert(p), p);
+            await Assert.That(TestTools.Convert(p)).IsEquivalentTo(p, CollectionOrdering.Matching);
         }
     }
 }

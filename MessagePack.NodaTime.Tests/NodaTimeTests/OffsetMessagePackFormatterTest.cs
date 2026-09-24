@@ -3,29 +3,29 @@
 // license information. 
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class OffsetMessagePackFormatterTest
     {
-        [Fact]
-        public void OffsetTest()
+        [Test]
+        public async Task OffsetTest()
         {
             Offset offSet = Offset.FromHours(1);
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEqualTo(offSet);
         }
 
-        [Fact]
-        public void NullableOffsetTest()
+        [Test]
+        public async Task NullableOffsetTest()
         {
             Offset? offSet = null;
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEqualTo(offSet);
         }               
 
-        [Fact]
-        public void OffsetArrayTest()
+        [Test]
+        public async Task OffsetArrayTest()
         {
             Offset[] offSet = new Offset[]
                 { Offset.FromHoursAndMinutes(1, 3),
@@ -34,11 +34,11 @@ namespace MessagePack.NodaTime.Tests
                 Offset.FromHours(3),
                 Offset.FromNanoseconds(99)
             };
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEquivalentTo(offSet, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void NullableOffsetArrayTest()
+        [Test]
+        public async Task NullableOffsetArrayTest()
         {
             Offset?[] offSet = new Offset?[] {
                 null,
@@ -47,7 +47,7 @@ namespace MessagePack.NodaTime.Tests
                 null,
                 null
             };
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEquivalentTo(offSet, CollectionOrdering.Matching);
         }        
     }
 }

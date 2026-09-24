@@ -4,29 +4,29 @@
 using MessagePack.NodaTime.Tests.Helpers;
 using NodaTime;
 using System;
-using Xunit;
+using System.Threading.Tasks;
+using TUnit.Assertions.Enums;
 
 namespace MessagePack.NodaTime.Tests
 {
-    [Collection("ResolverCollection")]
     public class OffsetDateTimeMessagePackFormatterTest
     {
-        [Fact]
-        public void OffsetDateTimeTest()
+        [Test]
+        public async Task OffsetDateTimeTest()
         {
             OffsetDateTime offSet = new OffsetDateTime().PlusHours(3).WithOffset(Offset.FromHours(6));
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEqualTo(offSet);
         }
 
-        [Fact]
-        public void NullableOffsetDateTimeTest()
+        [Test]
+        public async Task NullableOffsetDateTimeTest()
         {
             OffsetDateTime? offSet = null;
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEqualTo(offSet);
         }
         
-        [Fact]
-        public void OffsetDateTimeArrayTest()
+        [Test]
+        public async Task OffsetDateTimeArrayTest()
         {
             OffsetDateTime[] offSet = new OffsetDateTime[]
                 { new OffsetDateTime().WithOffset(Offset.FromHours(2)),
@@ -38,11 +38,11 @@ namespace MessagePack.NodaTime.Tests
 
             var aaa = TestTools.Convert(offSet);
 
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEquivalentTo(offSet, CollectionOrdering.Matching);
         }
 
-        [Fact]
-        public void NullableOffsetDateTimeArrayTest()
+        [Test]
+        public async Task NullableOffsetDateTimeArrayTest()
         {
             OffsetDateTime?[] offSet = new OffsetDateTime?[] {
                 null,
@@ -51,7 +51,7 @@ namespace MessagePack.NodaTime.Tests
                 null,
                 null
             };
-            Assert.Equal(TestTools.Convert(offSet), offSet);
+            await Assert.That(TestTools.Convert(offSet)).IsEquivalentTo(offSet, CollectionOrdering.Matching);
         }
         }
 }
