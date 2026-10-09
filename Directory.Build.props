@@ -62,7 +62,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Polyfill" Version="11.4.2" PrivateAssets="all" />
+		<PackageReference Include="Polyfill" Version="11.4.3" PrivateAssets="all" />
 	</ItemGroup>
 
 
